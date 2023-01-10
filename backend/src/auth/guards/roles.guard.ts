@@ -6,22 +6,16 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { log } from 'console';
 import { Observable } from 'rxjs';
 import { ROLES_KEY } from '../roles-auth.decorator';
-import { User, UserDocument } from 'src/user/schemas/user.schema';
-import { Model } from 'mongoose';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService,
-    private reflector: Reflector,
-  ) {}
+  constructor(private jwtService: JwtService, private reflector: Reflector) {}
 
   canActivate(
     context: ExecutionContext,

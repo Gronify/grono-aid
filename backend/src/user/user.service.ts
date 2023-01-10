@@ -15,7 +15,7 @@ export class UserService {
   async create(dto: CreateUserDto): Promise<User> {
     const role = await this.roleService.getRoleByValue('USER');
     const user = await this.userModel.create(dto);
-    user.role.push(role);
+    user.roles.push(role);
     await user.save();
 
     return user;
@@ -37,7 +37,7 @@ export class UserService {
     const user = await this.userModel.findById(dto.userId);
     const role = await this.roleService.getRoleByValue(dto.value);
     if (role && user) {
-      await user.role.push(role);
+      await user.roles.push(role);
       return dto;
     }
     throw new HttpException('User or role not exist', HttpStatus.NOT_FOUND);

@@ -39,7 +39,7 @@ export class AuthService {
 
   private async generateToken(user: User) {
     const roles = await Promise.all(
-      user.role.map(
+      user.roles.map(
         async (role) => await this.roleService.getValueByRole(role._id),
       ),
     );
