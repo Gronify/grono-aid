@@ -22,16 +22,17 @@ export class Gift {
   description: string;
 
   @Prop({ required: true })
+  period: number;
+
+  @Prop({ required: true })
   measurement: string;
 
   @Prop({
-    types: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Center',
-      required: true,
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Center',
+    required: true,
   })
-  centerId: mongoose.Schema.Types.ObjectId;
+  centerId: Center;
 }
 
 export const GiftSchema = SchemaFactory.createForClass(Gift);

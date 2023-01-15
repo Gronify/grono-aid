@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/user/schemas/user.schema';
 import { RolesService } from 'src/roles/roles.service';
+import { LoginUserDto } from 'src/user/dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: CreateUserDto) {
+  async login(userDto: LoginUserDto) {
     const user = await this.validateUser(userDto);
     return this.generateToken(user);
   }
@@ -44,13 +45,20 @@ export class AuthService {
       ),
     );
 
-    const payload = { email: user.email, id: user._id, roles: roles };
+    const payload = {
+      email: user.email,
+      _id: user._id,
+      name: user.name,
+      surname: user.surname,
+      patronymic: user.patronymic,
+      roles: roles,
+    };
     return {
       token: this.jwtService.sign(payload),
     };
   }
 
-  private async validateUser(userDto: CreateUserDto) {
+  private async validateUser(userDto: LoginUserDto) {
     const user = await this.userService.getUserByEmail(userDto.email);
     const passwordEquals = await bcrypt.compare(
       userDto.password,
@@ -60,5 +68,11 @@ export class AuthService {
       return user;
     }
     throw new UnauthorizedException({ messages: 'Uncorrect password' });
+  }
+
+  async check(user: User) {
+    // console.log(user._id);
+
+    return { message: 'ok' };
   }
 }

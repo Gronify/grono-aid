@@ -23,10 +23,25 @@ export class User {
   password: string;
 
   @Prop()
-  fullname: string;
+  surname: string;
+
+  @Prop()
+  name: string;
+
+  @Prop()
+  patronymic: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
   roles: Role[];
+
+  @Prop({
+    types: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Center',
+      required: true,
+    },
+  })
+  centerId: mongoose.Schema.Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
