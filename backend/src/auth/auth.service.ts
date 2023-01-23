@@ -54,7 +54,7 @@ export class AuthService {
       roles: roles,
     };
     return {
-      token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 

@@ -2,20 +2,24 @@ import axios, { AxiosInstance } from "axios";
 import { useDispatch } from "react-redux";
 
 import {
-  // LocalStorageToken,
+  LocalStorageToken,
   // userSingOutAction,
   PossibleErrorCodes,
   ERROR,
 } from "../core/lib/adapters";
 
+const API_URL = "http://localhost:5000/";
+
 export const useAxios = (): AxiosInstance => {
   const dispatch = useDispatch();
-  // const token = new LocalStorageToken().getAccessToken();
+  const localStorageToken = new LocalStorageToken();
+  const token = localStorageToken.getAccessToken();
 
   const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000/",
+    // withCredentials: true,
+    baseURL: API_URL,
     headers: {
-      // Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -23,13 +27,32 @@ export const useAxios = (): AxiosInstance => {
     return response;
   };
 
-  const handleError = (error: any): Error => {
+  const handleError = (error: any): Error | Promise<AxiosInstance> => {
     const errorCode: PossibleErrorCodes =
       error?.response?.data?.message || ERROR.UNDEFINED;
     const existingError = ERROR[errorCode] ? errorCode : ERROR.UNDEFINED;
 
-    if (existingError === ERROR.UNAUTHORIZED) {
-      // dispatch(userSingOutAction());
+    const originalRequest = error.config;
+    if (
+      existingError === ERROR.UNAUTHORIZED &&
+      error.config &&
+      !error.config._isRetry
+    ) {
+      originalRequest._isRetry = true;
+      try {
+        axios
+          .get(`${API_URL}/user/refresh`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            localStorageToken.setAccessToken(response.data.accessToken);
+            return axiosInstance.request(originalRequest);
+          });
+      } catch (e) {
+        // dispatch(userSingOutAction());
+        localStorage.removeItem("token");
+        console.log("Unauthorized");
+      }
     }
 
     throw new Error(existingError);
