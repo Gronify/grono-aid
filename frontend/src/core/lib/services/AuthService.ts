@@ -30,8 +30,10 @@ export default class AuthService implements AuthInterface {
     this._axios = axios;
   }
 
-  private _parseJwt(token: Token): UserEntityInterface {
-    var base64Url = token.access_token.split(".")[1];
+  parseJwt(): UserEntityInterface {
+    const storageToken = new LocalStorageToken();
+    const token = storageToken.getAccessToken();
+    var base64Url = token.split(".")[1];
     var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     var jsonPayload = decodeURIComponent(
       window
@@ -59,7 +61,6 @@ export default class AuthService implements AuthInterface {
         const storageToken = new LocalStorageToken();
 
         storageToken.setAccessToken(response.data);
-        dispatch(userUpdateAction(this._parseJwt(response.data)));
 
         dispatch(userSignInAction(response.data));
         return true;

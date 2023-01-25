@@ -64,4 +64,13 @@ export class AddressController {
   createFlat(@Body() flatDto: CreateFlatDto) {
     return this.addressService.createFlat(flatDto);
   }
+
+  @ApiOperation({ summary: 'Get all Regions' })
+  @ApiResponse({ status: 200, type: Region })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('region')
+  getRegions() {
+    return this.addressService.getRegions();
+  }
 }

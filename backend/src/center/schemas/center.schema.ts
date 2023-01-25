@@ -14,6 +14,18 @@ export class Center {
 
   @Prop()
   name: string;
+
+  @Prop()
+  address: string;
+
+  @Prop()
+  phone: string;
+
+  @Prop()
+  director: string;
+
+  @Prop()
+  phoneDirector: string;
 }
 
 export const CenterSchema = SchemaFactory.createForClass(Center);

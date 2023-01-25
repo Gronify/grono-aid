@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../core/lib/frameworks/redux';
+import { humanUpdateAction, regionUpdateAction } from '../../core/lib/adapters';
+import { Autocomplete } from '../../components/Autocomplete';
+import AddressService from '../../core/lib/services/AddressService';
+import { useAxios } from '../../hooks';
 
 
 type Props = {
@@ -16,13 +22,35 @@ const ІssuanceSchema = Yup.object().shape({
     .required("Пароль це обов'язкове поле вводу"),
 });
 
+
 const PageІssuance = () => {
+  const dispatch = useDispatch();
+  const human = useSelector((state: RootState) => state.human.data);
+  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const addressService = new AddressService(useAxios())
+
+
+
+  const region = useSelector((state: RootState) => state.region.data);
+  const regions = useSelector((state: RootState) => state.region.regions);
+  const isLoadingRegion = useSelector((state: RootState) => state.region.isLoading);
+
+  useEffect(() => {
+    addressService.getRegions(dispatch, isLoadingRegion)
+  }, [])
+
+  const handleChange = (prop: any) => (event: any) => {
+    dispatch(humanUpdateAction({ ...human, [prop]: event.target.value }))
+  };
+
+
+
 
   return (
     <>
       <div className='container mx-auto'>
         <div className="mt-5 md:col-span-2 md:mt-0">
-          <form action="#" method="POST">
+          <form>
             <div className="overflow-hidden shadow sm:rounded-md">
               <div className="bg-white px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-6 gap-6">
@@ -36,6 +64,7 @@ const PageІssuance = () => {
                       id="surname"
                       autoComplete="family-name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      onChange={handleChange("surname")}
                     />
                   </div>
 
@@ -49,6 +78,7 @@ const PageІssuance = () => {
                       id="name"
                       autoComplete="given-name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      onChange={handleChange("name")}
                     />
                   </div>
 
@@ -62,6 +92,7 @@ const PageІssuance = () => {
                       id="patronymic"
                       autoComplete="patronymic"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      onChange={handleChange("patronymic")}
                     />
                   </div>
 
@@ -74,6 +105,7 @@ const PageІssuance = () => {
                       name="ipn"
                       id="ipn"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      onChange={handleChange("ipn")}
                     />
                   </div>
 
@@ -87,6 +119,7 @@ const PageІssuance = () => {
                       id="phone"
                       autoComplete="phone"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      onChange={handleChange("phone")}
                     />
                   </div>
 
@@ -94,7 +127,8 @@ const PageІssuance = () => {
                     <label htmlFor="Region" className="block text-sm font-medium text-gray-700">
                       Регіон
                     </label>
-                    <select
+                    <Autocomplete options={regions} value={region} setValue={regionUpdateAction} isLoading={isLoading} />
+                    {/* <select
                       id="Region"
                       name="Region"
                       autoComplete="Region-name"
@@ -103,7 +137,7 @@ const PageІssuance = () => {
                       <option>Donecka</option>
                       <option>Harkivska</option>
                       <option>Luganska</option>
-                    </select>
+                    </select> */}
                   </div>
 
                   <div className="col-span-6 sm:col-span-3">

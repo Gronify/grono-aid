@@ -45,4 +45,9 @@ export class AddressService {
     const flat = await this.flatModel.create({ ...dto });
     return flat;
   }
+
+  async getRegions(): Promise<Region[]> {
+    const regions = await this.regionModel.find();
+    return regions;
+  }
 }

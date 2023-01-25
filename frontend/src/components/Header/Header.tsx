@@ -1,11 +1,15 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import * as React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { Link } from 'react-router-dom';
+import Avatar, { genConfig } from 'react-nice-avatar'
+import { userUpdateAction } from '../../core/lib/adapters';
+import AuthService from '../../core/lib/services/AuthService';
+import { useAxios } from '../../hooks';
 
 interface PrivateRouteProps {
   children: JSX.Element
@@ -29,13 +33,17 @@ const Header = ({
   const navigation = [
     { name: 'Dashboard', href: '#', current: false },
     { name: 'CenterStat', href: '#', current: false },
-    // { name: 'Projects', href: '#', current: false },
+    { name: 'Admin', href: 'admin', current: false },
     // { name: 'Calendar', href: '#', current: false },
   ]
-
+  const dispatch = useDispatch()
   const userIsLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const user = useSelector((state: RootState) => state.user.data);
+  const authService = new AuthService(useAxios());
 
+  useEffect(() => {
+    dispatch(userUpdateAction(authService.parseJwt()));
+  }, [userIsLoggedIn])
 
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -59,11 +67,13 @@ const Header = ({
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <Link to="/">
+                    <img
+                      className="block h-8 w-auto lg:hidden"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                   <img
                     className="hidden h-8 w-auto lg:block"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
@@ -104,10 +114,11 @@ const Header = ({
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
+                        <Avatar
+                          className="h-10 w-10 rounded-full"
+                          {...genConfig(user.email)}
+                        // src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        // alt=""
                         />
                       </Menu.Button>
                     </div>
@@ -164,18 +175,17 @@ const Header = ({
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => (
-                <Disclosure.Button
+                <Link
                   key={item.name}
-                  as="a"
-                  href={item.href}
+                  to={item.href}
                   className={classNames(
                     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
+                    'block px-3 py-2 rounded-md text-sm font-medium'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
-                </Disclosure.Button>
+                </Link>
               ))}
             </div>
           </Disclosure.Panel>
@@ -187,3 +197,17 @@ const Header = ({
 };
 
 export default Header;
+{/* <Disclosure.Button
+key={item.name}
+as="a"
+href={item.href}
+className={classNames(
+  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+  'block px-3 py-2 rounded-md text-base font-medium'
+)}
+aria-current={item.current ? 'page' : undefined}
+>
+{item.name}
+</Disclosure.Button> */}
+
+

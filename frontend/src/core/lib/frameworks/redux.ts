@@ -1,7 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { userReducer } from "../adapters";
+import { humanReducer, regionReducer, userReducer } from "../adapters";
+import human from "../adapters/redux/slices/human";
 const rootReducer = combineReducers({
   user: userReducer,
+  human: humanReducer,
+  region: regionReducer,
 });
 
 const store = configureStore({

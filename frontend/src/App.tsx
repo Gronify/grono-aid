@@ -13,6 +13,8 @@ import { Header } from './components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSingOutAction } from './core/lib/adapters';
 import { RootState } from './core/lib/frameworks/redux';
+import { PageHuman } from './pages/PageHuman';
+import { PageAdmin } from './pages/PageAdmin';
 
 function App() {
 
@@ -22,14 +24,14 @@ function App() {
     dispatch(userSingOutAction())
   }
   const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/")
+  // useEffect(() => {
+  //   navigate("/")
 
 
-    return () => {
+  //   return () => {
 
-    }
-  }, [userIsLoggedIn])
+  //   }
+  // }, [userIsLoggedIn])
 
   return (
     <>
@@ -37,6 +39,13 @@ function App() {
       }
 
       <Routes>
+
+        <Route path="/login" element={<PageLogin />} />
+        <Route path="/registration" element={<PageRegistration />} />
+        <Route path="/human">
+          <Route path=":id" element={<PageHuman />} />
+
+        </Route>
         <Route path="/" element={
           <PrivateRoute
             isLoggedIn={userIsLoggedIn}
@@ -45,9 +54,8 @@ function App() {
             <PageІssuance />
           </PrivateRoute>
         } />
-        <Route path="login" element={<PageLogin />} />
-        <Route path="registration" element={<PageRegistration />} />
-        <Route path="home" element={<PageІssuance />} />
+        <Route path="/admin" element={<PageAdmin />} />
+
       </Routes>
     </>
   );

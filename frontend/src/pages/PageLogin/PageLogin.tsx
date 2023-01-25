@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { LockClosedIcon } from '@heroicons/react/20/solid'
@@ -32,6 +32,7 @@ const PageLogin = () => {
   const authService = new AuthService(useAxios())
   const dispatch = useDispatch();
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const userIsLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const handleChange = (prop: any) => (event: any) => {
     setValues({ ...values, [prop]: event.target.value });
 
@@ -41,13 +42,21 @@ const PageLogin = () => {
   const handleSubmit = async (e: any) => {
     LoginSchema
       .validate(values)
-      .then(function (valid) {
-        authService.login(values, dispatch, isLoading)
-        navigate("/")
+      .then(async (valid) => {
+
+        await authService.login(values, dispatch, isLoading)
+
       }).catch(function (err: any) {
         console.log(err);
       });
   }
+
+  useEffect(() => {
+    if (userIsLoggedIn) {
+      navigate("/")
+    }
+  }, [userIsLoggedIn])
+
 
 
 
