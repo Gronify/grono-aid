@@ -50,4 +50,24 @@ export class AddressService {
     const regions = await this.regionModel.find();
     return regions;
   }
+
+  async getCities(regionId): Promise<City[]> {
+    const cities = await this.cityModel.find({ regionId: regionId });
+    return cities;
+  }
+
+  async getStreets(cityId): Promise<Street[]> {
+    const streets = await this.streetModel.find({ cityId: cityId });
+    return streets;
+  }
+
+  async getBuildings(streetId): Promise<Building[]> {
+    const buildings = await this.buildingModel.find({ streetId: streetId });
+    return buildings;
+  }
+
+  async getFlats(buildingId): Promise<Flat[]> {
+    const flats = await this.flatModel.find({ buildingId: buildingId });
+    return flats;
+  }
 }

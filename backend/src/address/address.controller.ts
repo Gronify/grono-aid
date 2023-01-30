@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -42,7 +42,7 @@ export class AddressController {
   @ApiResponse({ status: 200, type: Street })
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  @Post('city')
+  @Post('street')
   createStreet(@Body() streetDto: CreateStreetDto) {
     return this.addressService.createStreet(streetDto);
   }
@@ -72,5 +72,41 @@ export class AddressController {
   @Get('region')
   getRegions() {
     return this.addressService.getRegions();
+  }
+
+  @ApiOperation({ summary: 'Get all Cities' })
+  @ApiResponse({ status: 200, type: City })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('city')
+  getCities(@Query() query: { regionId: string }) {
+    return this.addressService.getCities(query.regionId);
+  }
+
+  @ApiOperation({ summary: 'Get all Streets' })
+  @ApiResponse({ status: 200, type: Street })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('street')
+  getStreets(@Query() query: { cityId: string }) {
+    return this.addressService.getStreets(query.cityId);
+  }
+
+  @ApiOperation({ summary: 'Get all Buildings' })
+  @ApiResponse({ status: 200, type: Building })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('building')
+  getBuildings(@Query() query: { streetId: string }) {
+    return this.addressService.getBuildings(query.streetId);
+  }
+
+  @ApiOperation({ summary: 'Get all Flats' })
+  @ApiResponse({ status: 200, type: Flat })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('flat')
+  getFlats(@Query() query: { buildingId: string }) {
+    return this.addressService.getFlats(query.buildingId);
   }
 }

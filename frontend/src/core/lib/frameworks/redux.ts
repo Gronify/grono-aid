@@ -1,10 +1,22 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { humanReducer, regionReducer, userReducer } from "../adapters";
-import human from "../adapters/redux/slices/human";
+import {
+  buildingReducer,
+  cityReducer,
+  flatReducer,
+  humanReducer,
+  regionReducer,
+  streetReducer,
+  userReducer,
+} from "../adapters";
+
 const rootReducer = combineReducers({
   user: userReducer,
   human: humanReducer,
   region: regionReducer,
+  city: cityReducer,
+  street: streetReducer,
+  building: buildingReducer,
+  flat: flatReducer,
 });
 
 const store = configureStore({

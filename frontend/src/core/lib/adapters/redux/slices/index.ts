@@ -13,6 +13,30 @@ import regionReducer, {
   regionsUpdateAction,
 } from "./region";
 
+import cityReducer, {
+  cityIsLoadingAction,
+  cityUpdateAction,
+  citiesUpdateAction,
+} from "./city";
+
+import streetReducer, {
+  streetIsLoadingAction,
+  streetUpdateAction,
+  streetsUpdateAction,
+} from "./street";
+
+import buildingReducer, {
+  buildingIsLoadingAction,
+  buildingUpdateAction,
+  buildingsUpdateAction,
+} from "./building";
+
+import flatReducer, {
+  flatIsLoadingAction,
+  flatUpdateAction,
+  flatsUpdateAction,
+} from "./flat";
+
 export {
   userReducer,
   userSignInAction,
@@ -26,4 +50,20 @@ export {
   regionIsLoadingAction,
   regionUpdateAction,
   regionsUpdateAction,
+  cityReducer,
+  cityIsLoadingAction,
+  cityUpdateAction,
+  citiesUpdateAction,
+  streetReducer,
+  streetIsLoadingAction,
+  streetUpdateAction,
+  streetsUpdateAction,
+  buildingReducer,
+  buildingIsLoadingAction,
+  buildingUpdateAction,
+  buildingsUpdateAction,
+  flatReducer,
+  flatIsLoadingAction,
+  flatUpdateAction,
+  flatsUpdateAction,
 };
