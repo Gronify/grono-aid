@@ -30,7 +30,7 @@ const ІssuanceSchema = Yup.object().shape({
 const PageAdmin = () => {
 
   const [tabs, setTabs] = useState([
-    { name: 'Statistics', current: false },
+    { name: 'Statistics', current: true },
     { name: 'Canter Manager', current: false },
     { name: 'Gift Manager', current: false },
     { name: 'Address Manager', current: false },

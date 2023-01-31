@@ -8,6 +8,7 @@ import { useAxios } from '../../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { userIsLoadingAction } from '../../core/lib/adapters';
+import { Link } from 'react-router-dom';
 
 type Props = {
   signIn: (login: string, password: string) => void;
@@ -73,7 +74,13 @@ const PageLogin = () => {
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Sign in to your account
             </h2>
+            <div className="text-sm">
+              <Link to="/registration" className="font-medium text-indigo-600 hover:text-indigo-500">
 
+                Регистрація
+              </Link>
+
+            </div>
           </div>
 
           <input type="hidden" name="remember" defaultValue="true" />

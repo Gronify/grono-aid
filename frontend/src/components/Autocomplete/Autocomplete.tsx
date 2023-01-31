@@ -18,7 +18,7 @@ type Props = {
     value: Option;
     isLoading: boolean;
     setValue: ActionCreatorWithPayload<any, any>;
-    handleCreate: (inputValue: string) => void;
+    handleCreate?: (inputValue: string) => void;
 
 }
 const Autocomplete = ({

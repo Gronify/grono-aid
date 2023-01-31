@@ -6,6 +6,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
@@ -35,16 +36,25 @@ export class RolesGuard implements CanActivate {
       const token = authHeader.split(' ')[1];
 
       if (bearer !== 'Bearer' || !token) {
-        throw new UnauthorizedException({ message: 'User unauthorized' });
+        throw new UnauthorizedException({ message: 'UNAUTHORIZED' });
+      }
+
+      try {
+        this.jwtService.verify(token);
+      } catch (e) {
+        throw new UnauthorizedException({ message: 'UNAUTHORIZED' });
       }
 
       const user = this.jwtService.verify(token);
-
       req.user = user;
 
       return user.roles.some((role) => requiredRoles.includes(role.value));
     } catch (e) {
-      throw new HttpException('forbidden', HttpStatus.FORBIDDEN);
+      if (e.status === 401) {
+        throw new UnauthorizedException({ message: 'UNAUTHORIZED' });
+      } else {
+        throw new ForbiddenException({ message: 'FORBIDDEN' });
+      }
     }
   }
 }

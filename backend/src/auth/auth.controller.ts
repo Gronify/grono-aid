@@ -7,6 +7,7 @@ import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { GetUser } from 'src/user/user.decorator';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './roles-auth.decorator';
 

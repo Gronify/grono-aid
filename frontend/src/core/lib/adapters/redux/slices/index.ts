@@ -37,6 +37,12 @@ import flatReducer, {
   flatsUpdateAction,
 } from "./flat";
 
+import centerReducer, {
+  centerIsLoadingAction,
+  centerUpdateAction,
+  centersUpdateAction,
+} from "./center";
+
 export {
   userReducer,
   userSignInAction,
@@ -66,4 +72,8 @@ export {
   flatIsLoadingAction,
   flatUpdateAction,
   flatsUpdateAction,
+  centerReducer,
+  centerIsLoadingAction,
+  centerUpdateAction,
+  centersUpdateAction,
 };

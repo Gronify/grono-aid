@@ -16,3 +16,13 @@ export type DtoUserLogin = {
   email: string;
   password: string;
 };
+
+export type DtoUserRegister = {
+  email: string;
+  password: string;
+  centerId: string;
+  surname: string;
+  name: string;
+  patronymic: string;
+  phone: string;
+};

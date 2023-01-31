@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import {
   LocalStorageToken,
-  // userSingOutAction,
+  userSingOutAction,
   PossibleErrorCodes,
   ERROR,
 } from "../core/lib/adapters";
@@ -33,6 +33,7 @@ export const useAxios = (): AxiosInstance => {
     const existingError = ERROR[errorCode] ? errorCode : ERROR.UNDEFINED;
 
     const originalRequest = error.config;
+
     if (
       existingError === ERROR.UNAUTHORIZED &&
       error.config &&
@@ -41,15 +42,21 @@ export const useAxios = (): AxiosInstance => {
       originalRequest._isRetry = true;
       try {
         axios
-          .get(`${API_URL}/user/refresh`, {
-            withCredentials: true,
+          .get(`${API_URL}user/refresh`, {
+            // withCredentials: true,
           })
           .then((response) => {
             localStorageToken.setAccessToken(response.data.accessToken);
             return axiosInstance.request(originalRequest);
+          })
+          .catch((e) => {
+            console.log(e);
+            dispatch(userSingOutAction());
+            localStorage.removeItem("token");
+            console.log("Unauthorized");
           });
       } catch (e) {
-        // dispatch(userSingOutAction());
+        dispatch(userSingOutAction());
         localStorage.removeItem("token");
         console.log("Unauthorized");
       }

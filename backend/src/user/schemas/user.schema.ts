@@ -10,7 +10,7 @@ export type UserDocument = User & Document;
 // -password
 // -fullname
 // -role
-// -centerid //todo
+// -centerid
 
 @Schema()
 export class User {
@@ -30,6 +30,9 @@ export class User {
 
   @Prop()
   patronymic: string;
+
+  @Prop()
+  phone: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
   roles: Role[];

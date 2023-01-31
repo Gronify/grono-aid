@@ -22,4 +22,7 @@ export class CreateUserDto {
   readonly name: string;
   @ApiProperty({ example: 'Alex ', description: 'name of user' })
   readonly patronymic: string;
+
+  @ApiProperty({ example: '+3845845544 ', description: 'phone of user' })
+  readonly phone: string;
 }

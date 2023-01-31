@@ -1,4 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { RolesModule } from 'src/roles/roles.module';
 import { UserModule } from 'src/user/user.module';
@@ -9,12 +10,13 @@ import { AuthService } from './auth.service';
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
+    ConfigModule.forRoot(),
     forwardRef(() => UserModule),
     forwardRef(() => RolesModule),
     JwtModule.register({
       secret: process.env.PRIVATE_KEY || 'SECRET',
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: process.env.JWT_LIFETIME,
       },
     }),
   ],

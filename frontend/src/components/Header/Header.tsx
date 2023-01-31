@@ -74,11 +74,13 @@ const Header = ({
                       alt="Your Company"
                     />
                   </Link>
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <Link to="/">
+                    <img
+                      className="hidden h-8 w-auto lg:block"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
 
                 <div className="hidden sm:ml-6 sm:block">
@@ -155,13 +157,13 @@ const Header = ({
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-
+                            <Link
+                              to="/"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               onClick={signOut}
                             >
                               Sign out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>

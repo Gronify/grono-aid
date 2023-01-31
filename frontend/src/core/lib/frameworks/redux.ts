@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   buildingReducer,
+  centerReducer,
   cityReducer,
   flatReducer,
   humanReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   street: streetReducer,
   building: buildingReducer,
   flat: flatReducer,
+  center: centerReducer,
 });
 
 const store = configureStore({

@@ -6,7 +6,7 @@ import {
   userUpdateAction,
 } from "../adapters";
 import { DtoTokenResponse } from "../dto/token";
-import { DtoUserLogin } from "../dto/user";
+import { DtoUserLogin, DtoUserRegister } from "../dto/user";
 import { useAxios } from "../../../hooks";
 import { AxiosInstance } from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,6 +57,35 @@ export default class AuthService implements AuthInterface {
 
     this._axios
       .post<DtoUserLogin, { data: DtoTokenResponse }>("/auth/login", loginData)
+      .then((response: any) => {
+        const storageToken = new LocalStorageToken();
+
+        storageToken.setAccessToken(response.data);
+
+        dispatch(userSignInAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(userIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async registration(
+    registrationData: DtoUserRegister,
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean
+  ) {
+    dispatch(userIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoUserRegister, { data: DtoTokenResponse }>(
+        "/auth/registration",
+        registrationData
+      )
       .then((response: any) => {
         const storageToken = new LocalStorageToken();
 
