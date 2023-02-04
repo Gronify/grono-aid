@@ -11,34 +11,53 @@ import { HumanSearchEntityInterface } from "../../../entities/Human";
 
 interface HumanSearchState {
   data: HumanSearchEntityInterface;
+  humans: HumanSearchEntityInterface[];
   isLoggedIn: boolean;
   isLoading: boolean;
 }
 
 const initialState: HumanSearchState = {
   data: {
+    _id: "",
     surname: "",
     name: "",
     patronymic: "",
     ipn: "",
+    dateOfBirthday: "",
     passportId: "",
     comment: "",
     phone: "",
     address: {
-      region: "",
-      city: "",
-      street: "",
-      building: "",
-      flat: "",
+      _id: "",
+      name: "",
+      buildingId: {
+        _id: "",
+        name: "",
+        streetId: {
+          _id: "",
+          name: "",
+          cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
+        },
+      },
     },
     actualAddress: {
-      region: "",
-      city: "",
-      street: "",
-      building: "",
-      flat: "",
+      _id: "",
+      name: "",
+      buildingId: {
+        _id: "",
+        name: "",
+        streetId: {
+          _id: "",
+          name: "",
+          cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
+        },
+      },
     },
+    blocked: false,
+    createdAt: "",
+    updatedAt: "",
   },
+  humans: [],
   isLoggedIn: new LocalStorageToken().hasAccessToken(),
   isLoading: false,
 };
@@ -66,21 +85,39 @@ export const humanSlice = createSlice({
       return {
         ...state,
         data: {
+          _id: human._id,
           surname: human.surname,
           name: human.name,
           patronymic: human.patronymic,
           ipn: human.ipn,
+          dateOfBirthday: human.dateOfBirthday,
           passportId: human.passportId,
           comment: human.comment,
           phone: human.phone,
           address: human.address,
           actualAddress: human.actualAddress,
+          blocked: human.blocked,
+          createdAt: human.createdAt,
+          updatedAt: human.updatedAt,
         },
+      };
+    },
+
+    humansUpdateAction: (
+      state,
+      action: PayloadAction<HumanSearchEntityInterface[]>
+    ) => {
+      const humans = action.payload;
+
+      return {
+        ...state,
+        humans: humans,
       };
     },
   },
 });
 
-export const { humanIsLoadingAction, humanUpdateAction } = humanSlice.actions;
+export const { humanIsLoadingAction, humanUpdateAction, humansUpdateAction } =
+  humanSlice.actions;
 
 export default humanSlice.reducer;

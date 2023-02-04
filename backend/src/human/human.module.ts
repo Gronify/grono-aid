@@ -11,6 +11,7 @@ import { Human, HumanSchema } from './schemas/human.schema';
   providers: [HumanService],
   imports: [
     forwardRef(() => AuthModule),
+
     MongooseModule.forFeature([{ name: Human.name, schema: HumanSchema }]),
   ],
   exports: [HumanService],

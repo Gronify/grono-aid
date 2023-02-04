@@ -5,7 +5,11 @@ import userReducer, {
   userUpdateAction,
 } from "./user";
 
-import humanReducer, { humanIsLoadingAction, humanUpdateAction } from "./human";
+import humanReducer, {
+  humanIsLoadingAction,
+  humanUpdateAction,
+  humansUpdateAction,
+} from "./human";
 
 import regionReducer, {
   regionIsLoadingAction,
@@ -52,6 +56,7 @@ export {
   humanReducer,
   humanIsLoadingAction,
   humanUpdateAction,
+  humansUpdateAction,
   regionReducer,
   regionIsLoadingAction,
   regionUpdateAction,

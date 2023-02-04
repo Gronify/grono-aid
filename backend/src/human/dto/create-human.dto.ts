@@ -54,7 +54,7 @@ export class CreateHumanDto {
     example: 'НВ12345',
     description: 'passportid of human',
   })
-  readonly passportid: string;
+  readonly passportId: string;
 
   @ApiProperty({
     example: '🤡🤡🤡🤡',

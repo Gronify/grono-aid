@@ -3,13 +3,7 @@ import { IsNotEmpty, IsDefined } from 'class-validator';
 
 import mongoose, { ObjectId } from 'mongoose';
 
-export class UpdateHumanDto {
-  @ApiProperty({
-    example: '63bcf652a3989d2896074cf0',
-    description: 'id of human',
-  })
-  readonly _id: mongoose.Schema.Types.ObjectId;
-
+export class SearchHumanDto {
   @ApiProperty({ example: 'Alex', description: 'Name of human' })
   readonly name: string;
 
@@ -35,42 +29,20 @@ export class UpdateHumanDto {
   readonly ipn: string;
 
   @ApiProperty({
-    example: '&&&???',
-    description: 'dateOfBirthday of human',
-  })
-  readonly dateOfBirthday: Date;
-
-  @ApiProperty({
     example: '63bcf652a3989d2896074cf0',
     description: 'address of human',
   })
-  @IsDefined()
-  @IsNotEmpty()
   readonly address: mongoose.Schema.Types.ObjectId;
 
   @ApiProperty({
     example: '63bcf652a3989d2896074cf0',
     description: 'actualAddress of human',
   })
-  @IsDefined()
-  @IsNotEmpty()
   readonly actualAddress: mongoose.Schema.Types.ObjectId;
 
   @ApiProperty({
     example: 'НВ12345',
     description: 'passportid of human',
   })
-  readonly passportId: string;
-
-  @ApiProperty({
-    example: '🤡🤡🤡🤡',
-    description: 'comment about human',
-  })
-  readonly comment: string;
-
-  @ApiProperty({
-    example: true,
-    description: 'blocked or not',
-  })
-  readonly blocked: boolean;
+  readonly passportid: string;
 }

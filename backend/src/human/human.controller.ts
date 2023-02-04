@@ -6,6 +6,7 @@ import { CreateHumanDto } from './dto/create-human.dto';
 import { HumanService } from './human.service';
 import { Human } from './schemas/human.schema';
 import { Query } from '@nestjs/common/decorators';
+import { SearchHumanDto } from './dto/search-human.dto';
 
 @ApiTags('Human')
 @Controller('human')
@@ -21,12 +22,21 @@ export class HumanController {
     return this.humanService.create(humanDto);
   }
 
-  // @ApiOperation({ summary: 'find human' })
-  // @ApiResponse({ status: 200, type: Human })
-  // @Roles('ADMIN')
-  // @UseGuards(RolesGuard)
-  // @Get()
-  // findHumanByIpn(@Query() query: CreateHumanDto) {
-  //   return this.humanService.findHumanByIpn();
-  // }
+  @ApiOperation({ summary: 'find human' })
+  @ApiResponse({ status: 200, type: Human })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get()
+  findHumanById(@Query() query: { _id: string }) {
+    return this.humanService.findHumanById(query._id);
+  }
+
+  @ApiOperation({ summary: 'find human' })
+  @ApiResponse({ status: 200, type: Human })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('search')
+  findHumanByIpn(@Query() query: SearchHumanDto) {
+    return this.humanService.findHumans(query);
+  }
 }

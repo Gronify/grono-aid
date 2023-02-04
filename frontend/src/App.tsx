@@ -43,7 +43,10 @@ function App() {
         <Route path="/login" element={<PageLogin />} />
         <Route path="/registration" element={<PageRegistration />} />
         <Route path="/human">
-          <Route path=":id" element={<PageHuman />} />
+          <Route path=":id" element={<PrivateRoute
+            isLoggedIn={userIsLoggedIn}
+            redirectPath={"login"}
+          ><PageHuman /></PrivateRoute>} />
 
         </Route>
         <Route path="/" element={
