@@ -7,16 +7,15 @@ import { LocalStorageToken } from "../../localStorage";
 import { SignInService } from "../../../services/SignInService";
 import { DtoRoleResponse } from "../../../dto/role";
 import { RoleEntityInterface } from "../../../entities/Role";
-import { HumanSearchEntityInterface } from "../../../entities/Human";
+import { HumanEntityInterface } from "../../../entities/Human";
 
-interface HumanSearchState {
-  data: HumanSearchEntityInterface;
-  humans: HumanSearchEntityInterface[];
-  isLoggedIn: boolean;
+interface HumanState {
+  data: HumanEntityInterface;
+
   isLoading: boolean;
 }
 
-const initialState: HumanSearchState = {
+const initialState: HumanState = {
   data: {
     _id: "",
     surname: "",
@@ -27,38 +26,55 @@ const initialState: HumanSearchState = {
     passportId: "",
     comment: "",
     phone: "",
-    address: {
+    addressRegion: {
       _id: "",
       name: "",
-      buildingId: {
-        _id: "",
-        name: "",
-        streetId: {
-          _id: "",
-          name: "",
-          cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
-        },
-      },
     },
-    actualAddress: {
+    addressCity: {
       _id: "",
       name: "",
-      buildingId: {
-        _id: "",
-        name: "",
-        streetId: {
-          _id: "",
-          name: "",
-          cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
-        },
-      },
+      regionId: "",
     },
-    blocked: false,
-    createdAt: "",
-    updatedAt: "",
+    addressStreet: {
+      _id: "",
+      name: "",
+      cityId: "",
+    },
+    addressBuilding: {
+      _id: "",
+      name: "",
+      streetId: "",
+    },
+    addressFlat: {
+      _id: "",
+      name: "",
+      buildingId: "",
+    },
+    actualAddressRegion: {
+      _id: "",
+      name: "",
+    },
+    actualAddressCity: {
+      _id: "",
+      name: "",
+      regionId: "",
+    },
+    actualAddressStreet: {
+      _id: "",
+      name: "",
+      cityId: "",
+    },
+    actualAddressBuilding: {
+      _id: "",
+      name: "",
+      streetId: "",
+    },
+    actualAddressFlat: {
+      _id: "",
+      name: "",
+      buildingId: "",
+    },
   },
-  humans: [],
-  isLoggedIn: new LocalStorageToken().hasAccessToken(),
   isLoading: false,
 };
 
@@ -76,10 +92,7 @@ export const humanSlice = createSlice({
       };
     },
 
-    humanUpdateAction: (
-      state,
-      action: PayloadAction<HumanSearchEntityInterface>
-    ) => {
+    humanUpdateAction: (state, action: PayloadAction<HumanEntityInterface>) => {
       const human = action.payload;
 
       return {
@@ -94,30 +107,24 @@ export const humanSlice = createSlice({
           passportId: human.passportId,
           comment: human.comment,
           phone: human.phone,
-          address: human.address,
-          actualAddress: human.actualAddress,
-          blocked: human.blocked,
-          createdAt: human.createdAt,
-          updatedAt: human.updatedAt,
+
+          addressRegion: human.addressRegion,
+          addressCity: human.addressCity,
+          addressStreet: human.addressStreet,
+          addressBuilding: human.addressBuilding,
+          addressFlat: human.addressFlat,
+
+          actualAddressRegion: human.actualAddressRegion,
+          actualAddressCity: human.actualAddressCity,
+          actualAddressStreet: human.actualAddressStreet,
+          actualAddressBuilding: human.actualAddressBuilding,
+          actualAddressFlat: human.actualAddressFlat,
         },
-      };
-    },
-
-    humansUpdateAction: (
-      state,
-      action: PayloadAction<HumanSearchEntityInterface[]>
-    ) => {
-      const humans = action.payload;
-
-      return {
-        ...state,
-        humans: humans,
       };
     },
   },
 });
 
-export const { humanIsLoadingAction, humanUpdateAction, humansUpdateAction } =
-  humanSlice.actions;
+export const { humanIsLoadingAction, humanUpdateAction } = humanSlice.actions;
 
 export default humanSlice.reducer;

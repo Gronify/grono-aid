@@ -2,18 +2,14 @@ import { AxiosInstance } from "axios";
 
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import {
-  centerIsLoadingAction,
-  centersUpdateAction,
-  humanIsLoadingAction,
-} from "../adapters";
+import { humanSearchIsLoadingAction } from "../adapters";
 
 import {
-  humansUpdateAction,
-  humanUpdateAction,
-} from "../adapters/redux/slices/human";
+  humansSearchUpdateAction,
+  humanSearchUpdateAction,
+} from "../adapters/redux/slices/humanSearch";
 import { DtoHumanSearchResponse } from "../dto/human";
-import { HumanSearchEntityInterface } from "../entities/Human";
+import { HumanEntityInterface } from "../entities/Human";
 
 export interface HumanInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -29,16 +25,16 @@ export default class HumanService implements HumanInterface {
   async findHumans(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
-    humanSearch: HumanSearchEntityInterface
+    humanSearch: HumanEntityInterface
   ) {
-    dispatch(humanIsLoadingAction({ isLoading: true }));
+    dispatch(humanSearchIsLoadingAction({ isLoading: true }));
 
     this._axios
       .get<DtoHumanSearchResponse[]>("/human/search", {
         params: { ...humanSearch },
       })
       .then((response) => {
-        dispatch(humansUpdateAction(response.data));
+        dispatch(humansSearchUpdateAction(response.data));
         return true;
       })
       .catch((error: any) => {
@@ -46,7 +42,7 @@ export default class HumanService implements HumanInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(humanIsLoadingAction({ isLoading: false }));
+        dispatch(humanSearchIsLoadingAction({ isLoading: false }));
       });
   }
 
@@ -55,14 +51,14 @@ export default class HumanService implements HumanInterface {
     isLoading: boolean,
     _id: string | undefined
   ) {
-    dispatch(humanIsLoadingAction({ isLoading: true }));
+    dispatch(humanSearchIsLoadingAction({ isLoading: true }));
 
     this._axios
       .get<DtoHumanSearchResponse>("/human", {
         params: { _id },
       })
       .then((response) => {
-        dispatch(humanUpdateAction(response.data));
+        dispatch(humanSearchUpdateAction(response.data));
         return true;
       })
       .catch((error: any) => {
@@ -70,7 +66,7 @@ export default class HumanService implements HumanInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(humanIsLoadingAction({ isLoading: false }));
+        dispatch(humanSearchIsLoadingAction({ isLoading: false }));
       });
   }
 }

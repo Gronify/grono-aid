@@ -2,41 +2,64 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CityEntityInterface } from "../../../entities/Address";
 
 interface CityState {
-  data: CityEntityInterface;
-  cities: CityEntityInterface[];
-  isLoading: boolean;
+  addressCity: CityEntityInterface;
+  addressCities: CityEntityInterface[];
+  actualAddressCity: CityEntityInterface;
+  actualAddressCities: CityEntityInterface[];
+  addressCityIsLoading: boolean;
+  actualAddressCityIsLoading: boolean;
 }
 
 const initialState: CityState = {
-  data: {
+  addressCity: {
     _id: "",
     name: "",
     regionId: "",
   },
-  cities: [],
-  isLoading: false,
+  addressCities: [],
+  actualAddressCity: {
+    _id: "",
+    name: "",
+    regionId: "",
+  },
+  actualAddressCities: [],
+  addressCityIsLoading: false,
+  actualAddressCityIsLoading: false,
 };
 
 export const citySlice = createSlice({
   name: "city",
   initialState,
   reducers: {
-    cityIsLoadingAction: (
+    addressCityIsLoadingAction: (
       state,
       action: PayloadAction<{ isLoading: boolean }>
     ) => {
       return {
         ...state,
-        isLoading: action.payload.isLoading,
+        addressCityIsLoading: action.payload.isLoading,
       };
     },
 
-    cityUpdateAction: (state, action: PayloadAction<CityEntityInterface>) => {
+    actualAddressCityIsLoadingAction: (
+      state,
+      action: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      return {
+        ...state,
+        actualAddressCityIsLoading: action.payload.isLoading,
+      };
+    },
+
+    addressCityUpdateAction: (
+      state,
+      action: PayloadAction<CityEntityInterface>
+    ) => {
       const city = action.payload;
 
       return {
         ...state,
-        data: {
+        addressCity: {
           _id: city._id,
           name: city.name,
           regionId: city.regionId,
@@ -44,7 +67,7 @@ export const citySlice = createSlice({
       };
     },
 
-    citiesUpdateAction: (
+    addressCitiesUpdateAction: (
       state,
       action: PayloadAction<CityEntityInterface[]>
     ) => {
@@ -52,13 +75,47 @@ export const citySlice = createSlice({
 
       return {
         ...state,
-        cities: cities,
+        addressCities: cities,
+      };
+    },
+
+    actualAddressCityUpdateAction: (
+      state,
+      action: PayloadAction<CityEntityInterface>
+    ) => {
+      const city = action.payload;
+
+      return {
+        ...state,
+        actualAddressCity: {
+          _id: city._id,
+          name: city.name,
+          regionId: city.regionId,
+        },
+      };
+    },
+
+    actualAddressCitiesUpdateAction: (
+      state,
+      action: PayloadAction<CityEntityInterface[]>
+    ) => {
+      const cities = action.payload;
+
+      return {
+        ...state,
+        actualAddressCities: cities,
       };
     },
   },
 });
 
-export const { cityIsLoadingAction, cityUpdateAction, citiesUpdateAction } =
-  citySlice.actions;
+export const {
+  addressCityIsLoadingAction,
+  actualAddressCityIsLoadingAction,
+  addressCityUpdateAction,
+  addressCitiesUpdateAction,
+  actualAddressCityUpdateAction,
+  actualAddressCitiesUpdateAction,
+} = citySlice.actions;
 
 export default citySlice.reducer;

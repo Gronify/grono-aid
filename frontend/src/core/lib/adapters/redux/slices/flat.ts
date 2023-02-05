@@ -2,41 +2,64 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FlatEntityInterface } from "../../../entities/Address";
 
 interface FlatState {
-  data: FlatEntityInterface;
-  flats: FlatEntityInterface[];
-  isLoading: boolean;
+  addressFlat: FlatEntityInterface;
+  addressFlats: FlatEntityInterface[];
+  actualAddressFlat: FlatEntityInterface;
+  actualAddressFlats: FlatEntityInterface[];
+  addressFlatIsLoading: boolean;
+  actualAddressFlatIsLoading: boolean;
 }
 
 const initialState: FlatState = {
-  data: {
+  addressFlat: {
     _id: "",
     name: "",
     buildingId: "",
   },
-  flats: [],
-  isLoading: false,
+  addressFlats: [],
+  actualAddressFlat: {
+    _id: "",
+    name: "",
+    buildingId: "",
+  },
+  actualAddressFlats: [],
+  addressFlatIsLoading: false,
+  actualAddressFlatIsLoading: false,
 };
 
 export const flatSlice = createSlice({
   name: "flat",
   initialState,
   reducers: {
-    flatIsLoadingAction: (
+    addressFlatIsLoadingAction: (
       state,
       action: PayloadAction<{ isLoading: boolean }>
     ) => {
       return {
         ...state,
-        isLoading: action.payload.isLoading,
+        addressFlatIsLoading: action.payload.isLoading,
       };
     },
 
-    flatUpdateAction: (state, action: PayloadAction<FlatEntityInterface>) => {
+    actualAddressFlatIsLoadingAction: (
+      state,
+      action: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      return {
+        ...state,
+        addressFlatIsLoading: action.payload.isLoading,
+      };
+    },
+
+    addressFlatUpdateAction: (
+      state,
+      action: PayloadAction<FlatEntityInterface>
+    ) => {
       const flat = action.payload;
 
       return {
         ...state,
-        data: {
+        addressFlat: {
           _id: flat._id,
           name: flat.name,
           buildingId: flat.buildingId,
@@ -44,7 +67,7 @@ export const flatSlice = createSlice({
       };
     },
 
-    flatsUpdateAction: (
+    addressFlatsUpdateAction: (
       state,
       action: PayloadAction<FlatEntityInterface[]>
     ) => {
@@ -52,13 +75,47 @@ export const flatSlice = createSlice({
 
       return {
         ...state,
-        flats: flats,
+        addressFlats: flats,
+      };
+    },
+
+    actualAddressFlatUpdateAction: (
+      state,
+      action: PayloadAction<FlatEntityInterface>
+    ) => {
+      const flat = action.payload;
+
+      return {
+        ...state,
+        actualAddressFlat: {
+          _id: flat._id,
+          name: flat.name,
+          buildingId: flat.buildingId,
+        },
+      };
+    },
+
+    actualAddressFlatsUpdateAction: (
+      state,
+      action: PayloadAction<FlatEntityInterface[]>
+    ) => {
+      const flats = action.payload;
+
+      return {
+        ...state,
+        actualAddressFlats: flats,
       };
     },
   },
 });
 
-export const { flatIsLoadingAction, flatUpdateAction, flatsUpdateAction } =
-  flatSlice.actions;
+export const {
+  addressFlatIsLoadingAction,
+  actualAddressFlatIsLoadingAction,
+  addressFlatUpdateAction,
+  addressFlatsUpdateAction,
+  actualAddressFlatUpdateAction,
+  actualAddressFlatsUpdateAction,
+} = flatSlice.actions;
 
 export default flatSlice.reducer;

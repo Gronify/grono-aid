@@ -4,11 +4,11 @@ import * as Yup from 'yup';
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
-import { buildingUpdateAction, cityUpdateAction, flatUpdateAction, humansUpdateAction, humanUpdateAction, regionUpdateAction, streetUpdateAction } from '../../core/lib/adapters';
+import { actualAddressBuildingUpdateAction, actualAddressCityUpdateAction, actualAddressFlatUpdateAction, actualAddressRegionUpdateAction, actualAddressStreetUpdateAction, addressBuildingUpdateAction, addressCityUpdateAction, addressFlatUpdateAction, addressRegionUpdateAction, addressStreetUpdateAction, humanUpdateAction } from '../../core/lib/adapters';
 import { Autocomplete } from '../../components/Autocomplete';
 import AddressService from '../../core/lib/services/AddressService';
 import { useAxios } from '../../hooks';
-import HumanService from '../../core/lib/services/HumanService';
+import HumanService from '../../core/lib/services/HumanSearchService';
 import Avatar, { genConfig } from 'react-nice-avatar';
 import { Link } from 'react-router-dom';
 import InputMask from "react-input-mask";
@@ -30,75 +30,139 @@ const PageІssuance = () => {
   const dispatch = useDispatch();
 
   const [hasIpn, setHasIpn] = useState(true)
-  const [hasActualAddress, setHasActualAddress] = useState(true)
-
+  const [hasActualAddress, setHasActualAddress] = useState(false)
 
   const human = useSelector((state: RootState) => state.human.data);
-  const humans = useSelector((state: RootState) => state.human.humans);
+
+
+  const humanSearch = useSelector((state: RootState) => state.humanSearch.data);
+  const humansSearch = useSelector((state: RootState) => state.humanSearch.humans);
+
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
+
   const addressService = new AddressService(useAxios())
   const humanService = new HumanService(useAxios())
 
-  const region = useSelector((state: RootState) => state.region.data);
-  const regions = useSelector((state: RootState) => state.region.regions);
-  const isLoadingRegion = useSelector((state: RootState) => state.region.isLoading);
+  const addressRegion = useSelector((state: RootState) => state.region.addressRegion);
+  const actualAddressRegion = useSelector((state: RootState) => state.region.actualAddressRegion);
+  const addressRegions = useSelector((state: RootState) => state.region.addressRegions);
+  const actualAddressRegions = useSelector((state: RootState) => state.region.actualAddressRegions);
+  const isLoadingAddressRegion = useSelector((state: RootState) => state.region.addressRegionIsLoading);
+  const isLoadingActualAddressRegion = useSelector((state: RootState) => state.region.actualAddressRegionIsLoading);
 
-  const city = useSelector((state: RootState) => state.city.data);
-  const cities = useSelector((state: RootState) => state.city.cities);
-  const isLoadingCity = useSelector((state: RootState) => state.city.isLoading);
+  const addressCity = useSelector((state: RootState) => state.city.addressCity);
+  const actualAddressCity = useSelector((state: RootState) => state.city.actualAddressCity);
+  const addressCities = useSelector((state: RootState) => state.city.addressCities);
+  const actualAddressCities = useSelector((state: RootState) => state.city.actualAddressCities);
+  const isLoadingAddressCity = useSelector((state: RootState) => state.city.addressCityIsLoading);
+  const isLoadingActualAddressCity = useSelector((state: RootState) => state.city.actualAddressCityIsLoading);
 
-  const street = useSelector((state: RootState) => state.street.data);
-  const streets = useSelector((state: RootState) => state.street.streets);
-  const isLoadingStreet = useSelector((state: RootState) => state.street.isLoading);
+  const addressStreet = useSelector((state: RootState) => state.street.addressStreet);
+  const actualAddressStreet = useSelector((state: RootState) => state.street.actualAddressStreet);
+  const addressStreets = useSelector((state: RootState) => state.street.addressStreets);
+  const actualAddressStreets = useSelector((state: RootState) => state.street.actualAddressStreets);
+  const isLoadingAddressStreet = useSelector((state: RootState) => state.street.addressStreetIsLoading);
+  const isLoadingActualAddressStreet = useSelector((state: RootState) => state.street.actualAddressStreetIsLoading);
 
-  const building = useSelector((state: RootState) => state.building.data);
-  const buildings = useSelector((state: RootState) => state.building.buildings);
-  const isLoadingBuilding = useSelector((state: RootState) => state.building.isLoading);
+  const addressBuilding = useSelector((state: RootState) => state.building.addressBuilding);
+  const actualAddressBuilding = useSelector((state: RootState) => state.building.actualAddressBuilding);
+  const addressBuildings = useSelector((state: RootState) => state.building.addressBuildings);
+  const actualAddressBuildings = useSelector((state: RootState) => state.building.actualAddressBuildings);
+  const isLoadingAddressBuilding = useSelector((state: RootState) => state.building.addressBuildingIsLoading);
+  const isLoadingActualAddressBuilding = useSelector((state: RootState) => state.building.actualAddressBuildingIsLoading);
 
-  const flat = useSelector((state: RootState) => state.flat.data);
-  const flats = useSelector((state: RootState) => state.flat.flats);
-  const isLoadingFlat = useSelector((state: RootState) => state.flat.isLoading);
+  const addressFlat = useSelector((state: RootState) => state.flat.addressFlat);
+  const actualAddressFlat = useSelector((state: RootState) => state.flat.actualAddressFlat);
+  const addressFlats = useSelector((state: RootState) => state.flat.addressFlats);
+  const actualAddressFlats = useSelector((state: RootState) => state.flat.actualAddressFlats);
+  const isLoadingAddressFlat = useSelector((state: RootState) => state.flat.addressFlatIsLoading);
+  const isLoadingActualAddressFlat = useSelector((state: RootState) => state.flat.actualAddressFlatIsLoading);
+
 
   useEffect(() => {
-    addressService.getRegions(dispatch, isLoadingRegion)
+    addressService.getAddressRegions(dispatch, isLoadingAddressRegion)
+    addressService.getActualAddressRegions(dispatch, isLoadingActualAddressRegion)
   }, [])
 
   useEffect(() => {
-    dispatch(cityUpdateAction({
+    dispatch(addressCityUpdateAction({
       _id: "",
       name: "",
       regionId: "",
     }))
-    addressService.getCities(dispatch, isLoadingRegion, region._id)
-  }, [region])
+    addressService.getAddressCities(dispatch, isLoadingAddressRegion, addressRegion._id)
+  }, [addressRegion])
 
   useEffect(() => {
-    dispatch(streetUpdateAction({
-      _id: "",
-      name: "",
-      cityId: "",
-    }))
-    addressService.getStreets(dispatch, isLoadingRegion, city._id)
-  }, [city])
+    dispatch(addressStreetUpdateAction(
+      {
+        _id: "",
+        name: "",
+        cityId: "",
+      }
+    ))
+    addressService.getAddressStreets(dispatch, isLoadingAddressRegion, addressCity._id)
+  }, [addressCity])
 
 
   useEffect(() => {
-    dispatch(buildingUpdateAction({
+    dispatch(addressBuildingUpdateAction({
       _id: "",
       name: "",
       streetId: "",
     }))
-    addressService.getBuildings(dispatch, isLoadingRegion, street._id)
-  }, [street])
+    addressService.getAddressBuildings(dispatch, isLoadingAddressRegion, addressStreet._id)
+  }, [addressStreet])
 
   useEffect(() => {
-    dispatch(flatUpdateAction({
+    dispatch(addressFlatUpdateAction({
       _id: "",
       name: "",
       buildingId: "",
+    }
+    ))
+    addressService.getAddressFlats(dispatch, isLoadingAddressRegion, addressBuilding._id)
+  }, [addressBuilding])
+
+  useEffect(() => {
+    dispatch(actualAddressCityUpdateAction({
+      _id: "",
+      name: "",
+      regionId: "",
     }))
-    addressService.getFlats(dispatch, isLoadingRegion, building._id)
-  }, [building])
+    addressService.getActualAddressCities(dispatch, isLoadingAddressRegion, actualAddressRegion._id)
+  }, [actualAddressRegion])
+
+  useEffect(() => {
+    dispatch(actualAddressStreetUpdateAction(
+      {
+        _id: "",
+        name: "",
+        cityId: "",
+      }
+    ))
+    addressService.getActualAddressStreets(dispatch, isLoadingAddressRegion, actualAddressCity._id)
+  }, [actualAddressCity])
+
+
+  useEffect(() => {
+    dispatch(actualAddressBuildingUpdateAction({
+      _id: "",
+      name: "",
+      streetId: "",
+    }))
+    addressService.getActualAddressBuildings(dispatch, isLoadingAddressRegion, actualAddressStreet._id)
+  }, [actualAddressStreet])
+
+  useEffect(() => {
+    dispatch(actualAddressFlatUpdateAction({
+      _id: "",
+      name: "",
+      buildingId: "",
+    }
+    ))
+    addressService.getActualAddressFlats(dispatch, isLoadingAddressRegion, actualAddressBuilding._id)
+  }, [actualAddressBuilding])
 
 
 
@@ -108,23 +172,44 @@ const PageІssuance = () => {
 
 
   const handleCreateRegion = (inputValue: string) => {
-    addressService.createRegion(dispatch, isLoadingRegion, { name: inputValue });
+    addressService.createAddressRegion(dispatch, isLoadingAddressRegion, { name: inputValue });
   }
 
   const handleCreateCity = (inputValue: string) => {
-    addressService.createCity(dispatch, isLoadingCity, { regionId: region._id, name: inputValue });
+    addressService.createAddressCity(dispatch, isLoadingAddressCity, { regionId: addressRegion._id, name: inputValue });
   }
 
   const handleCreateStreet = (inputValue: string) => {
-    addressService.createStreet(dispatch, isLoadingStreet, { cityId: city._id, name: inputValue });
+    addressService.createAddressStreet(dispatch, isLoadingAddressStreet, { cityId: addressCity._id, name: inputValue });
   }
 
   const handleCreateBuilding = (inputValue: string) => {
-    addressService.createBuilding(dispatch, isLoadingBuilding, { streetId: street._id, name: inputValue });
+    addressService.createAddressBuilding(dispatch, isLoadingAddressBuilding, { streetId: addressStreet._id, name: inputValue });
   }
 
   const handleCreateFlat = (inputValue: string) => {
-    addressService.createFlat(dispatch, isLoadingFlat, { buildingId: building._id, name: inputValue });
+    addressService.createAddressFlat(dispatch, isLoadingAddressFlat, { buildingId: addressBuilding._id, name: inputValue });
+  }
+
+
+  const handleCreateActualRegion = (inputValue: string) => {
+    addressService.createActualAddressRegion(dispatch, isLoadingAddressRegion, { name: inputValue });
+  }
+
+  const handleCreateActualCity = (inputValue: string) => {
+    addressService.createActualAddressCity(dispatch, isLoadingAddressCity, { regionId: actualAddressRegion._id, name: inputValue });
+  }
+
+  const handleCreateActualStreet = (inputValue: string) => {
+    addressService.createActualAddressStreet(dispatch, isLoadingAddressStreet, { cityId: actualAddressCity._id, name: inputValue });
+  }
+
+  const handleCreateActualBuilding = (inputValue: string) => {
+    addressService.createActualAddressBuilding(dispatch, isLoadingAddressBuilding, { streetId: actualAddressStreet._id, name: inputValue });
+  }
+
+  const handleCreateActualFlat = (inputValue: string) => {
+    addressService.createActualAddressFlat(dispatch, isLoadingAddressFlat, { buildingId: actualAddressBuilding._id, name: inputValue });
   }
 
   const handleButton = (prop: any) => {
@@ -184,7 +269,7 @@ const PageІssuance = () => {
                   />
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
+                <div className="col-span-6 ">
                   <label htmlFor="ipnOrPassport" className="flex justify-between text-sm font-medium text-gray-700">
                     {hasIpn ? "ІПН" : "Паспорт"}
                     <div className="flex  items-center text-sm font-medium text-gray-700">
@@ -217,10 +302,10 @@ const PageІssuance = () => {
 
                       />
                     </InputMask> :
-
+                    // TODO: TO UPPERCASE
                     <InputMask
-                      mask='999999'
-                      value={human.passportId}
+                      mask={"aa999999"}
+                      value={human.passportId.toUpperCase()}
                       maskPlaceholder=""
                       onChange={handleChange("passportId")}
                     >
@@ -229,10 +314,29 @@ const PageІssuance = () => {
                         name="passportId"
                         id="passportId"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-
                       />
-                    </InputMask>}
+                    </InputMask>
 
+                  }
+                </div>
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Дата народження
+                  </label>
+                  <InputMask
+                    mask='99.99.9999'
+                    value={human.dateOfBirthday}
+                    placeholder="23.08.2002"
+                    maskPlaceholder=""
+                    onChange={handleChange("dateOfBirthday")}
+                  >
+                    <input type="text"
+                      name="dateOfBirthday"
+                      id="dateOfBirthday"
+
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                  </InputMask>
 
                 </div>
 
@@ -261,35 +365,35 @@ const PageІssuance = () => {
                   <label htmlFor="Region" className="block text-sm font-medium text-gray-700">
                     Регіон
                   </label>
-                  <Autocomplete options={regions} value={region} setValue={regionUpdateAction} isLoading={isLoadingRegion} handleCreate={handleCreateRegion} />
+                  <Autocomplete options={addressRegions} value={addressRegion} setValue={addressRegionUpdateAction} isLoading={isLoadingAddressRegion} handleCreate={handleCreateRegion} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="City" className="block text-sm font-medium text-gray-700">
                     Населенний пункт
                   </label>
-                  <Autocomplete options={cities} value={city} setValue={cityUpdateAction} isLoading={isLoadingCity} handleCreate={handleCreateCity} />
+                  <Autocomplete options={addressCities} value={addressCity} setValue={addressCityUpdateAction} isLoading={isLoadingAddressCity} handleCreate={handleCreateCity} />
                 </div>
 
                 <div className="col-span-6">
                   <label htmlFor="street-address" className="block text-sm font-medium text-gray-700">
                     Вулиця
                   </label>
-                  <Autocomplete options={streets} value={street} setValue={streetUpdateAction} isLoading={isLoadingStreet} handleCreate={handleCreateStreet} />
+                  <Autocomplete options={addressStreets} value={addressStreet} setValue={addressStreetUpdateAction} isLoading={isLoadingAddressStreet} handleCreate={handleCreateStreet} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3 lg:col-span-3">
                   <label htmlFor="building" className="block text-sm font-medium text-gray-700">
                     Будинок
                   </label>
-                  <Autocomplete options={buildings} value={building} setValue={buildingUpdateAction} isLoading={isLoadingBuilding} handleCreate={handleCreateBuilding} />
+                  <Autocomplete options={addressBuildings} value={addressBuilding} setValue={addressBuildingUpdateAction} isLoading={isLoadingAddressBuilding} handleCreate={handleCreateBuilding} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3 lg:col-span-3">
                   <label htmlFor="flat" className="block text-sm font-medium text-gray-700">
                     Квартира
                   </label>
-                  <Autocomplete options={flats} value={flat} setValue={flatUpdateAction} isLoading={isLoadingFlat} handleCreate={handleCreateFlat} />
+                  <Autocomplete options={addressFlats} value={addressFlat} setValue={addressFlatUpdateAction} isLoading={isLoadingAddressFlat} handleCreate={handleCreateFlat} />
                 </div>
                 <div className="col-span-6">
                   <label htmlFor="hasActualAddress" className="flex justify-start text-sm font-medium text-gray-700">
@@ -311,41 +415,40 @@ const PageІssuance = () => {
                   </label>
 
                 </div>
-                {hasActualAddress ? <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="Region" className="block text-sm font-medium text-gray-700">
-                    Регіон
-                  </label>
-                  <Autocomplete options={regions} value={region} setValue={regionUpdateAction} isLoading={isLoadingRegion} handleCreate={handleCreateRegion} />
-                </div> : null}
-
-
+                {hasActualAddress ?
+                  <div className="col-span-6 sm:col-span-3">
+                    <label htmlFor="Region" className="block text-sm font-medium text-gray-700">
+                      Регіон
+                    </label>
+                    <Autocomplete options={actualAddressRegions} value={actualAddressRegion} setValue={actualAddressRegionUpdateAction} isLoading={isLoadingActualAddressRegion} handleCreate={handleCreateActualRegion} />
+                  </div> : null}
 
                 {hasActualAddress ? <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="City" className="block text-sm font-medium text-gray-700">
                     Населенний пункт
                   </label>
-                  <Autocomplete options={cities} value={city} setValue={cityUpdateAction} isLoading={isLoadingCity} handleCreate={handleCreateCity} />
+                  <Autocomplete options={actualAddressCities} value={actualAddressCity} setValue={actualAddressCityUpdateAction} isLoading={isLoadingActualAddressCity} handleCreate={handleCreateActualCity} />
                 </div> : null}
 
                 {hasActualAddress ? <div className="col-span-6">
                   <label htmlFor="street-address" className="block text-sm font-medium text-gray-700">
                     Вулиця
                   </label>
-                  <Autocomplete options={streets} value={street} setValue={streetUpdateAction} isLoading={isLoadingStreet} handleCreate={handleCreateStreet} />
+                  <Autocomplete options={actualAddressStreets} value={actualAddressStreet} setValue={actualAddressStreetUpdateAction} isLoading={isLoadingActualAddressStreet} handleCreate={handleCreateActualStreet} />
                 </div> : null}
 
                 {hasActualAddress ? <div className="col-span-6 sm:col-span-3 lg:col-span-3">
                   <label htmlFor="building" className="block text-sm font-medium text-gray-700">
                     Будинок
                   </label>
-                  <Autocomplete options={buildings} value={building} setValue={buildingUpdateAction} isLoading={isLoadingBuilding} handleCreate={handleCreateBuilding} />
+                  <Autocomplete options={actualAddressBuildings} value={actualAddressBuilding} setValue={actualAddressBuildingUpdateAction} isLoading={isLoadingActualAddressBuilding} handleCreate={handleCreateActualBuilding} />
                 </div> : null}
 
                 {hasActualAddress ? <div className="col-span-6 sm:col-span-3 lg:col-span-3">
                   <label htmlFor="flat" className="block text-sm font-medium text-gray-700">
                     Квартира
                   </label>
-                  <Autocomplete options={flats} value={flat} setValue={flatUpdateAction} isLoading={isLoadingFlat} handleCreate={handleCreateFlat} />
+                  <Autocomplete options={actualAddressFlats} value={actualAddressFlat} setValue={actualAddressFlatUpdateAction} isLoading={isLoadingActualAddressFlat} handleCreate={handleCreateActualFlat} />
                 </div> : null}
               </div>
             </div>
@@ -360,30 +463,40 @@ const PageІssuance = () => {
               </button>
             </div>
 
+            <div className="bg-gray-50 px-4 py-3 text-center sm:px-6">
+              <button
+
+                className="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={handleButton}
+              >
+                Створити
+              </button>
+            </div>
+
           </div>
 
 
           <ul className=" divide-y divide-gray-200 dark:divide-gray-700">
-            {humans.map((human) => {
-              return <Link to={'/human/' + human._id}> <li className="pb-3 sm:pb-4 block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+            {humansSearch.map((humanSearch) => {
+              return <Link to={'/human/' + humanSearch._id} key={humanSearch._id}> <li className="pb-3 sm:pb-4 block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0 ">
                     <Avatar
                       className="h-10 w-10 rounded-full"
-                      {...genConfig(human.surname + human.name + human.patronymic)}
+                      {...genConfig(humanSearch.surname + humanSearch.name + humanSearch.patronymic)}
 
                     />
 
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      {human.surname} {human.name} {human.patronymic}
+                      {humanSearch.surname} {humanSearch.name} {humanSearch.patronymic}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                      {human.address.buildingId.streetId.cityId.regionId.name}, {human.address.buildingId.streetId.cityId.name}, {human.address.buildingId.streetId.name}, {human.address.buildingId.name}/{human.address.name}
+                      {humanSearch.address.buildingId.streetId.cityId.regionId.name}, {humanSearch.address.buildingId.streetId.cityId.name}, {humanSearch.address.buildingId.streetId.name}, {humanSearch.address.buildingId.name}/{humanSearch.address.name}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                      {human.phone}
+                      {humanSearch.phone}
                     </p>
                   </div>
 
@@ -396,12 +509,6 @@ const PageІssuance = () => {
             })}
 
           </ul>
-
-
-
-
-
-
         </div>
       </div>
 

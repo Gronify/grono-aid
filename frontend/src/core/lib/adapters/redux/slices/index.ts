@@ -5,40 +5,55 @@ import userReducer, {
   userUpdateAction,
 } from "./user";
 
-import humanReducer, {
-  humanIsLoadingAction,
-  humanUpdateAction,
-  humansUpdateAction,
-} from "./human";
+import humanSearchReducer, {
+  humanSearchIsLoadingAction,
+  humanSearchUpdateAction,
+  humansSearchUpdateAction,
+} from "./humanSearch";
 
 import regionReducer, {
-  regionIsLoadingAction,
-  regionUpdateAction,
-  regionsUpdateAction,
+  addressRegionIsLoadingAction,
+  actualAddressRegionIsLoadingAction,
+  addressRegionUpdateAction,
+  actualAddressRegionUpdateAction,
+  addressRegionsUpdateAction,
+  actualAddressRegionsUpdateAction,
 } from "./region";
 
 import cityReducer, {
-  cityIsLoadingAction,
-  cityUpdateAction,
-  citiesUpdateAction,
+  addressCityIsLoadingAction,
+  actualAddressCityIsLoadingAction,
+  addressCityUpdateAction,
+  addressCitiesUpdateAction,
+  actualAddressCityUpdateAction,
+  actualAddressCitiesUpdateAction,
 } from "./city";
 
 import streetReducer, {
-  streetIsLoadingAction,
-  streetUpdateAction,
-  streetsUpdateAction,
+  addressStreetIsLoadingAction,
+  actualAddressStreetIsLoadingAction,
+  addressStreetUpdateAction,
+  addressStreetsUpdateAction,
+  actualAddressStreetUpdateAction,
+  actualAddressStreetsUpdateAction,
 } from "./street";
 
 import buildingReducer, {
-  buildingIsLoadingAction,
-  buildingUpdateAction,
-  buildingsUpdateAction,
+  addressBuildingIsLoadingAction,
+  actualAddressBuildingIsLoadingAction,
+  addressBuildingUpdateAction,
+  addressBuildingsUpdateAction,
+  actualAddressBuildingUpdateAction,
+  actualAddressBuildingsUpdateAction,
 } from "./building";
 
 import flatReducer, {
-  flatIsLoadingAction,
-  flatUpdateAction,
-  flatsUpdateAction,
+  addressFlatIsLoadingAction,
+  actualAddressFlatIsLoadingAction,
+  addressFlatUpdateAction,
+  addressFlatsUpdateAction,
+  actualAddressFlatUpdateAction,
+  actualAddressFlatsUpdateAction,
 } from "./flat";
 
 import centerReducer, {
@@ -47,36 +62,56 @@ import centerReducer, {
   centersUpdateAction,
 } from "./center";
 
+import humanReducer, { humanIsLoadingAction, humanUpdateAction } from "./human";
+
 export {
   userReducer,
   userSignInAction,
   userSingOutAction,
   userIsLoadingAction,
   userUpdateAction,
+  humanSearchReducer,
+  humanSearchIsLoadingAction,
+  humanSearchUpdateAction,
+  humansSearchUpdateAction,
   humanReducer,
   humanIsLoadingAction,
   humanUpdateAction,
-  humansUpdateAction,
   regionReducer,
-  regionIsLoadingAction,
-  regionUpdateAction,
-  regionsUpdateAction,
+  addressRegionIsLoadingAction,
+  actualAddressRegionIsLoadingAction,
+  addressRegionUpdateAction,
+  actualAddressRegionUpdateAction,
+  addressRegionsUpdateAction,
+  actualAddressRegionsUpdateAction,
   cityReducer,
-  cityIsLoadingAction,
-  cityUpdateAction,
-  citiesUpdateAction,
+  addressCityIsLoadingAction,
+  actualAddressCityIsLoadingAction,
+  addressCityUpdateAction,
+  addressCitiesUpdateAction,
+  actualAddressCityUpdateAction,
+  actualAddressCitiesUpdateAction,
   streetReducer,
-  streetIsLoadingAction,
-  streetUpdateAction,
-  streetsUpdateAction,
+  addressStreetIsLoadingAction,
+  actualAddressStreetIsLoadingAction,
+  addressStreetUpdateAction,
+  addressStreetsUpdateAction,
+  actualAddressStreetUpdateAction,
+  actualAddressStreetsUpdateAction,
   buildingReducer,
-  buildingIsLoadingAction,
-  buildingUpdateAction,
-  buildingsUpdateAction,
+  addressBuildingIsLoadingAction,
+  actualAddressBuildingIsLoadingAction,
+  addressBuildingUpdateAction,
+  addressBuildingsUpdateAction,
+  actualAddressBuildingUpdateAction,
+  actualAddressBuildingsUpdateAction,
   flatReducer,
-  flatIsLoadingAction,
-  flatUpdateAction,
-  flatsUpdateAction,
+  addressFlatIsLoadingAction,
+  actualAddressFlatIsLoadingAction,
+  addressFlatUpdateAction,
+  addressFlatsUpdateAction,
+  actualAddressFlatUpdateAction,
+  actualAddressFlatsUpdateAction,
   centerReducer,
   centerIsLoadingAction,
   centerUpdateAction,

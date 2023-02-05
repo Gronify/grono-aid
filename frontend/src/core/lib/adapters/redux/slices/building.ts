@@ -2,36 +2,56 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BuildingEntityInterface } from "../../../entities/Address";
 
 interface BuildingState {
-  data: BuildingEntityInterface;
-  buildings: BuildingEntityInterface[];
-  isLoading: boolean;
+  addressBuilding: BuildingEntityInterface;
+  addressBuildings: BuildingEntityInterface[];
+  actualAddressBuilding: BuildingEntityInterface;
+  actualAddressBuildings: BuildingEntityInterface[];
+  addressBuildingIsLoading: boolean;
+  actualAddressBuildingIsLoading: boolean;
 }
 
 const initialState: BuildingState = {
-  data: {
+  addressBuilding: {
     _id: "",
     name: "",
     streetId: "",
   },
-  buildings: [],
-  isLoading: false,
+  addressBuildings: [],
+  actualAddressBuilding: {
+    _id: "",
+    name: "",
+    streetId: "",
+  },
+  actualAddressBuildings: [],
+  addressBuildingIsLoading: false,
+  actualAddressBuildingIsLoading: false,
 };
 
 export const buildingSlice = createSlice({
   name: "building",
   initialState,
   reducers: {
-    buildingIsLoadingAction: (
+    addressBuildingIsLoadingAction: (
       state,
       action: PayloadAction<{ isLoading: boolean }>
     ) => {
       return {
         ...state,
-        isLoading: action.payload.isLoading,
+        addressBuildingIsLoading: action.payload.isLoading,
       };
     },
 
-    buildingUpdateAction: (
+    actualAddressBuildingIsLoadingAction: (
+      state,
+      action: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      return {
+        ...state,
+        actualAddressBuildingIsLoading: action.payload.isLoading,
+      };
+    },
+
+    addressBuildingUpdateAction: (
       state,
       action: PayloadAction<BuildingEntityInterface>
     ) => {
@@ -39,7 +59,7 @@ export const buildingSlice = createSlice({
 
       return {
         ...state,
-        data: {
+        addressBuilding: {
           _id: building._id,
           name: building.name,
           streetId: building.streetId,
@@ -47,7 +67,7 @@ export const buildingSlice = createSlice({
       };
     },
 
-    buildingsUpdateAction: (
+    addressBuildingsUpdateAction: (
       state,
       action: PayloadAction<BuildingEntityInterface[]>
     ) => {
@@ -55,16 +75,47 @@ export const buildingSlice = createSlice({
 
       return {
         ...state,
-        buildings: buildings,
+        addressBuildings: buildings,
+      };
+    },
+
+    actualAddressBuildingUpdateAction: (
+      state,
+      action: PayloadAction<BuildingEntityInterface>
+    ) => {
+      const building = action.payload;
+
+      return {
+        ...state,
+        actualAddressBuilding: {
+          _id: building._id,
+          name: building.name,
+          streetId: building.streetId,
+        },
+      };
+    },
+
+    actualAddressBuildingsUpdateAction: (
+      state,
+      action: PayloadAction<BuildingEntityInterface[]>
+    ) => {
+      const buildings = action.payload;
+
+      return {
+        ...state,
+        actualAddressBuildings: buildings,
       };
     },
   },
 });
 
 export const {
-  buildingIsLoadingAction,
-  buildingUpdateAction,
-  buildingsUpdateAction,
+  addressBuildingIsLoadingAction,
+  actualAddressBuildingIsLoadingAction,
+  addressBuildingUpdateAction,
+  addressBuildingsUpdateAction,
+  actualAddressBuildingUpdateAction,
+  actualAddressBuildingsUpdateAction,
 } = buildingSlice.actions;
 
 export default buildingSlice.reducer;

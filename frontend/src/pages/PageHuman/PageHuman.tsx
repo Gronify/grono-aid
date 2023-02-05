@@ -7,7 +7,7 @@ import { RootState } from '../../core/lib/frameworks/redux';
 import { humanUpdateAction } from '../../core/lib/adapters';
 import { useParams } from 'react-router-dom';
 import { useAxios } from '../../hooks';
-import HumanService from '../../core/lib/services/HumanService';
+import HumanService from '../../core/lib/services/HumanSearchService';
 import moment from 'moment';
 
 
@@ -28,8 +28,8 @@ const PageHuman = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const human = useSelector((state: RootState) => state.human.data)
-  const isLoading = useSelector((state: RootState) => state.human.isLoading)
+  const humanSearch = useSelector((state: RootState) => state.humanSearch.data)
+  const isLoading = useSelector((state: RootState) => state.humanSearch.isLoading)
   const humanService = new HumanService(useAxios())
   useEffect(() => {
     humanService.findHumanById(dispatch, isLoading, id)
@@ -42,16 +42,16 @@ const PageHuman = () => {
       <div className='container mx-auto'>
         <div className="mt-5 md:col-span-2 md:mt-0">
           <h4 className="font-medium leading-tight text-2xl">Profile</h4>
-          <h4 className="font-medium leading-tight text-2xl">Прізвище: {human.surname}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Ім'я: {human.name}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Побатькові: {human.patronymic}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Номер: {human.phone}</h4>
-          <h4 className="font-medium leading-tight text-2xl">ІПН: {human.ipn}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Паспорт ID: {human.passportId}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Дата народження: {moment(human.dateOfBirthday).format('DD.MM.YYYY')}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Адреса: {human.address.buildingId.streetId.cityId.regionId.name}, {human.address.buildingId.streetId.cityId.name}, {human.address.buildingId.streetId.name}, {human.address.buildingId.name}/{human.address.name}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Прізвище: {humanSearch.surname}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Ім'я: {humanSearch.name}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Побатькові: {humanSearch.patronymic}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Номер: {humanSearch.phone}</h4>
+          <h4 className="font-medium leading-tight text-2xl">ІПН: {humanSearch.ipn}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Паспорт ID: {humanSearch.passportId}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Дата народження: {moment(humanSearch.dateOfBirthday).format('DD.MM.YYYY')}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Адреса: {humanSearch.address.buildingId.streetId.cityId.regionId.name}, {humanSearch.address.buildingId.streetId.cityId.name}, {humanSearch.address.buildingId.streetId.name}, {humanSearch.address.buildingId.name}/{humanSearch.address.name}</h4>
           <h4 className="font-medium leading-tight text-2xl">Фактична адреса:</h4>
-          <h4 className="font-medium leading-tight text-2xl">ІПН: {human.comment}</h4>
+          <h4 className="font-medium leading-tight text-2xl">ІПН: {humanSearch.comment}</h4>
           <ol className="border-l border-gray-300">
             <li>
               <div className="flex flex-start items-center pt-3">

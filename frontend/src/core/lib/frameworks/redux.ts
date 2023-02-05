@@ -5,6 +5,7 @@ import {
   cityReducer,
   flatReducer,
   humanReducer,
+  humanSearchReducer,
   regionReducer,
   streetReducer,
   userReducer,
@@ -13,6 +14,7 @@ import {
 const rootReducer = combineReducers({
   user: userReducer,
   human: humanReducer,
+  humanSearch: humanSearchReducer,
   region: regionReducer,
   city: cityReducer,
   street: streetReducer,

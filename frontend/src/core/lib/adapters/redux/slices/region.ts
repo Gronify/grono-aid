@@ -2,35 +2,54 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RegionEntityInterface } from "../../../entities/Address";
 
 interface RegionState {
-  data: RegionEntityInterface;
-  regions: RegionEntityInterface[];
-  isLoading: boolean;
+  addressRegion: RegionEntityInterface;
+  addressRegions: RegionEntityInterface[];
+  actualAddressRegion: RegionEntityInterface;
+  actualAddressRegions: RegionEntityInterface[];
+  addressRegionIsLoading: boolean;
+  actualAddressRegionIsLoading: boolean;
 }
 
 const initialState: RegionState = {
-  data: {
+  addressRegion: {
     _id: "",
     name: "",
   },
-  regions: [],
-  isLoading: false,
+  addressRegions: [],
+
+  actualAddressRegion: {
+    _id: "",
+    name: "",
+  },
+  actualAddressRegions: [],
+  addressRegionIsLoading: false,
+  actualAddressRegionIsLoading: false,
 };
 
 export const regionSlice = createSlice({
   name: "region",
   initialState,
   reducers: {
-    regionIsLoadingAction: (
+    addressRegionIsLoadingAction: (
       state,
       action: PayloadAction<{ isLoading: boolean }>
     ) => {
       return {
         ...state,
-        isLoading: action.payload.isLoading,
+        addressRegionІsLoading: action.payload.isLoading,
+      };
+    },
+    actualAddressRegionIsLoadingAction: (
+      state,
+      action: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      return {
+        ...state,
+        actualAddressRegionІsLoading: action.payload.isLoading,
       };
     },
 
-    regionUpdateAction: (
+    addressRegionUpdateAction: (
       state,
       action: PayloadAction<RegionEntityInterface>
     ) => {
@@ -38,14 +57,14 @@ export const regionSlice = createSlice({
 
       return {
         ...state,
-        data: {
+        addressRegion: {
           _id: region._id,
           name: region.name,
         },
       };
     },
 
-    regionsUpdateAction: (
+    addressRegionsUpdateAction: (
       state,
       action: PayloadAction<RegionEntityInterface[]>
     ) => {
@@ -53,16 +72,46 @@ export const regionSlice = createSlice({
 
       return {
         ...state,
-        regions: regions,
+        addressRegions: regions,
+      };
+    },
+
+    actualAddressRegionUpdateAction: (
+      state,
+      action: PayloadAction<RegionEntityInterface>
+    ) => {
+      const region = action.payload;
+
+      return {
+        ...state,
+        actualAddressRegion: {
+          _id: region._id,
+          name: region.name,
+        },
+      };
+    },
+
+    actualAddressRegionsUpdateAction: (
+      state,
+      action: PayloadAction<RegionEntityInterface[]>
+    ) => {
+      const regions = action.payload;
+
+      return {
+        ...state,
+        actualAddressRegions: regions,
       };
     },
   },
 });
 
 export const {
-  regionIsLoadingAction,
-  regionUpdateAction,
-  regionsUpdateAction,
+  addressRegionIsLoadingAction,
+  actualAddressRegionIsLoadingAction,
+  addressRegionUpdateAction,
+  addressRegionsUpdateAction,
+  actualAddressRegionUpdateAction,
+  actualAddressRegionsUpdateAction,
 } = regionSlice.actions;
 
 export default regionSlice.reducer;

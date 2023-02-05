@@ -2,36 +2,55 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StreetEntityInterface } from "../../../entities/Address";
 
 interface StreetState {
-  data: StreetEntityInterface;
-  streets: StreetEntityInterface[];
-  isLoading: boolean;
+  addressStreet: StreetEntityInterface;
+  addressStreets: StreetEntityInterface[];
+  actualAddressStreet: StreetEntityInterface;
+  actualAddressStreets: StreetEntityInterface[];
+  addressStreetIsLoading: boolean;
+  actualAddressStreetIsLoading: boolean;
 }
 
 const initialState: StreetState = {
-  data: {
+  addressStreet: {
     _id: "",
     name: "",
     cityId: "",
   },
-  streets: [],
-  isLoading: false,
+  addressStreets: [],
+  actualAddressStreet: {
+    _id: "",
+    name: "",
+    cityId: "",
+  },
+  actualAddressStreets: [],
+  addressStreetIsLoading: false,
+  actualAddressStreetIsLoading: false,
 };
 
 export const streetSlice = createSlice({
   name: "street",
   initialState,
   reducers: {
-    streetIsLoadingAction: (
+    addressStreetIsLoadingAction: (
       state,
       action: PayloadAction<{ isLoading: boolean }>
     ) => {
       return {
         ...state,
-        isLoading: action.payload.isLoading,
+        addressStreetIsLoading: action.payload.isLoading,
+      };
+    },
+    actualAddressStreetIsLoadingAction: (
+      state,
+      action: PayloadAction<{ isLoading: boolean }>
+    ) => {
+      return {
+        ...state,
+        actualAddressStreetIsLoading: action.payload.isLoading,
       };
     },
 
-    streetUpdateAction: (
+    addressStreetUpdateAction: (
       state,
       action: PayloadAction<StreetEntityInterface>
     ) => {
@@ -39,7 +58,7 @@ export const streetSlice = createSlice({
 
       return {
         ...state,
-        data: {
+        addressStreet: {
           _id: street._id,
           name: street.name,
           cityId: street.cityId,
@@ -47,7 +66,7 @@ export const streetSlice = createSlice({
       };
     },
 
-    streetsUpdateAction: (
+    addressStreetsUpdateAction: (
       state,
       action: PayloadAction<StreetEntityInterface[]>
     ) => {
@@ -55,16 +74,47 @@ export const streetSlice = createSlice({
 
       return {
         ...state,
-        streets: streets,
+        addressStreets: streets,
+      };
+    },
+
+    actualAddressStreetUpdateAction: (
+      state,
+      action: PayloadAction<StreetEntityInterface>
+    ) => {
+      const street = action.payload;
+
+      return {
+        ...state,
+        actualAddressStreet: {
+          _id: street._id,
+          name: street.name,
+          cityId: street.cityId,
+        },
+      };
+    },
+
+    actualAddressStreetsUpdateAction: (
+      state,
+      action: PayloadAction<StreetEntityInterface[]>
+    ) => {
+      const streets = action.payload;
+
+      return {
+        ...state,
+        actualAddressStreets: streets,
       };
     },
   },
 });
 
 export const {
-  streetIsLoadingAction,
-  streetUpdateAction,
-  streetsUpdateAction,
+  addressStreetIsLoadingAction,
+  actualAddressStreetIsLoadingAction,
+  addressStreetUpdateAction,
+  addressStreetsUpdateAction,
+  actualAddressStreetUpdateAction,
+  actualAddressStreetsUpdateAction,
 } = streetSlice.actions;
 
 export default streetSlice.reducer;

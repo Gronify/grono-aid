@@ -10,21 +10,36 @@ import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
 import {
-  buildingIsLoadingAction,
-  buildingsUpdateAction,
-  buildingUpdateAction,
-  citiesUpdateAction,
-  cityIsLoadingAction,
-  cityUpdateAction,
-  flatIsLoadingAction,
-  flatsUpdateAction,
-  flatUpdateAction,
-  regionIsLoadingAction,
-  regionsUpdateAction,
-  regionUpdateAction,
-  streetIsLoadingAction,
-  streetsUpdateAction,
-  streetUpdateAction,
+  addressRegionIsLoadingAction,
+  actualAddressRegionIsLoadingAction,
+  addressRegionUpdateAction,
+  actualAddressRegionUpdateAction,
+  addressRegionsUpdateAction,
+  actualAddressRegionsUpdateAction,
+  addressCityIsLoadingAction,
+  addressCitiesUpdateAction,
+  addressCityUpdateAction,
+  addressStreetIsLoadingAction,
+  addressStreetsUpdateAction,
+  addressStreetUpdateAction,
+  addressBuildingIsLoadingAction,
+  addressBuildingsUpdateAction,
+  addressBuildingUpdateAction,
+  addressFlatIsLoadingAction,
+  addressFlatsUpdateAction,
+  addressFlatUpdateAction,
+  actualAddressFlatIsLoadingAction,
+  actualAddressFlatUpdateAction,
+  actualAddressFlatsUpdateAction,
+  actualAddressBuildingUpdateAction,
+  actualAddressBuildingsUpdateAction,
+  actualAddressBuildingIsLoadingAction,
+  actualAddressStreetIsLoadingAction,
+  actualAddressStreetUpdateAction,
+  actualAddressStreetsUpdateAction,
+  actualAddressCityUpdateAction,
+  actualAddressCityIsLoadingAction,
+  actualAddressCitiesUpdateAction,
 } from "../adapters";
 import { RoleEntityInterface } from "../entities/Role";
 import {
@@ -39,6 +54,7 @@ import {
   DtoRegionResponse,
   DtoStreetResponse,
 } from "../dto/address";
+import { log } from "console";
 export interface AddressInterface {
   //   login: (loginData: DtoUserLogin) => any;
 }
@@ -54,13 +70,13 @@ export default class AddressService implements AddressInterface {
     this._axios = axios;
   }
 
-  async getRegions(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
-    dispatch(regionIsLoadingAction({ isLoading: true }));
+  async getAddressRegions(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
+    dispatch(addressRegionIsLoadingAction({ isLoading: true }));
 
     this._axios
       .get<DtoRegionResponse[]>("/address/region")
       .then((response) => {
-        dispatch(regionsUpdateAction(response.data));
+        dispatch(addressRegionsUpdateAction(response.data));
         return true;
       })
       .catch((error: any) => {
@@ -68,16 +84,37 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(regionIsLoadingAction({ isLoading: false }));
+        dispatch(addressRegionIsLoadingAction({ isLoading: false }));
       });
   }
 
-  async createRegion(
+  async getActualAddressRegions(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean
+  ) {
+    dispatch(actualAddressRegionIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .get<DtoRegionResponse[]>("/address/region")
+      .then((response) => {
+        dispatch(actualAddressRegionsUpdateAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressRegionIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async createAddressRegion(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     region: DtoCreateRegion
   ) {
-    dispatch(regionIsLoadingAction({ isLoading: true }));
+    dispatch(addressRegionIsLoadingAction({ isLoading: true }));
 
     this._axios
       .post<DtoCreateRegion, { data: DtoRegionResponse }>(
@@ -85,8 +122,8 @@ export default class AddressService implements AddressInterface {
         region
       )
       .then((response) => {
-        dispatch(regionUpdateAction(response.data));
-        this.getRegions(dispatch, isLoading);
+        dispatch(addressRegionUpdateAction(response.data));
+        this.getAddressRegions(dispatch, isLoading);
         return true;
       })
       .catch((error: any) => {
@@ -94,23 +131,49 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(regionIsLoadingAction({ isLoading: false }));
+        dispatch(addressRegionIsLoadingAction({ isLoading: false }));
       });
   }
 
-  async getCities(
+  async createActualAddressRegion(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    region: DtoCreateRegion
+  ) {
+    dispatch(actualAddressRegionIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoCreateRegion, { data: DtoRegionResponse }>(
+        "/address/region",
+        region
+      )
+      .then((response) => {
+        dispatch(actualAddressRegionUpdateAction(response.data));
+        this.getActualAddressRegions(dispatch, isLoading);
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressRegionIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getAddressCities(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     regionId: string
   ) {
     if (regionId !== "") {
-      dispatch(cityIsLoadingAction({ isLoading: true }));
+      dispatch(addressCityIsLoadingAction({ isLoading: true }));
       this._axios
         .get<DtoCityResponse[]>("/address/city", {
           params: { regionId: regionId },
         })
         .then((response) => {
-          dispatch(citiesUpdateAction(response.data));
+          dispatch(addressCitiesUpdateAction(response.data));
           return true;
         })
         .catch((error: any) => {
@@ -118,25 +181,52 @@ export default class AddressService implements AddressInterface {
           // onShowErrorToast(error);
         })
         .finally(() => {
-          dispatch(cityIsLoadingAction({ isLoading: false }));
+          dispatch(addressCityIsLoadingAction({ isLoading: false }));
         });
     } else {
-      citiesUpdateAction([]);
+      addressCitiesUpdateAction([]);
     }
   }
 
-  async createCity(
+  async getActualAddressCities(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    regionId: string
+  ) {
+    if (regionId !== "") {
+      dispatch(actualAddressCityIsLoadingAction({ isLoading: true }));
+      this._axios
+        .get<DtoCityResponse[]>("/address/city", {
+          params: { regionId: regionId },
+        })
+        .then((response) => {
+          dispatch(actualAddressCitiesUpdateAction(response.data));
+          return true;
+        })
+        .catch((error: any) => {
+          return error;
+          // onShowErrorToast(error);
+        })
+        .finally(() => {
+          dispatch(actualAddressCityIsLoadingAction({ isLoading: false }));
+        });
+    } else {
+      actualAddressCitiesUpdateAction([]);
+    }
+  }
+
+  async createAddressCity(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     city: DtoCreateCity
   ) {
-    dispatch(cityIsLoadingAction({ isLoading: true }));
+    dispatch(addressCityIsLoadingAction({ isLoading: true }));
 
     this._axios
       .post<DtoCreateCity, { data: DtoCityResponse }>("/address/city", city)
       .then((response) => {
-        dispatch(cityUpdateAction(response.data));
-        this.getCities(dispatch, isLoading, response.data.regionId);
+        dispatch(addressCityUpdateAction(response.data));
+        this.getAddressCities(dispatch, isLoading, response.data.regionId);
         return true;
       })
       .catch((error: any) => {
@@ -144,23 +234,50 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(cityIsLoadingAction({ isLoading: false }));
+        dispatch(addressCityIsLoadingAction({ isLoading: false }));
       });
   }
 
-  async getStreets(
+  async createActualAddressCity(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    city: DtoCreateCity
+  ) {
+    dispatch(actualAddressCityIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoCreateCity, { data: DtoCityResponse }>("/address/city", city)
+      .then((response) => {
+        dispatch(actualAddressCityUpdateAction(response.data));
+        this.getActualAddressCities(
+          dispatch,
+          isLoading,
+          response.data.regionId
+        );
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressCityIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getAddressStreets(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     cityId: string
   ) {
     if (cityId !== "") {
-      dispatch(streetIsLoadingAction({ isLoading: true }));
+      dispatch(addressStreetIsLoadingAction({ isLoading: true }));
       this._axios
         .get<DtoStreetResponse[]>("/address/street", {
           params: { cityId: cityId },
         })
         .then((response) => {
-          dispatch(streetsUpdateAction(response.data));
+          dispatch(addressStreetsUpdateAction(response.data));
           return true;
         })
         .catch((error: any) => {
@@ -168,19 +285,46 @@ export default class AddressService implements AddressInterface {
           // onShowErrorToast(error);
         })
         .finally(() => {
-          dispatch(streetIsLoadingAction({ isLoading: false }));
+          dispatch(addressStreetIsLoadingAction({ isLoading: false }));
         });
     } else {
-      streetsUpdateAction([]);
+      addressStreetsUpdateAction([]);
     }
   }
 
-  async createStreet(
+  async getActualAddressStreets(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    cityId: string
+  ) {
+    if (cityId !== "") {
+      dispatch(actualAddressStreetIsLoadingAction({ isLoading: true }));
+      this._axios
+        .get<DtoStreetResponse[]>("/address/street", {
+          params: { cityId: cityId },
+        })
+        .then((response) => {
+          dispatch(actualAddressStreetsUpdateAction(response.data));
+          return true;
+        })
+        .catch((error: any) => {
+          return error;
+          // onShowErrorToast(error);
+        })
+        .finally(() => {
+          dispatch(actualAddressStreetIsLoadingAction({ isLoading: false }));
+        });
+    } else {
+      actualAddressStreetsUpdateAction([]);
+    }
+  }
+
+  async createAddressStreet(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     street: DtoCreateStreet
   ) {
-    dispatch(streetIsLoadingAction({ isLoading: true }));
+    dispatch(addressStreetIsLoadingAction({ isLoading: true }));
 
     this._axios
       .post<DtoCreateStreet, { data: DtoStreetResponse }>(
@@ -188,8 +332,8 @@ export default class AddressService implements AddressInterface {
         street
       )
       .then((response) => {
-        dispatch(streetUpdateAction(response.data));
-        this.getStreets(dispatch, isLoading, response.data.cityId);
+        dispatch(addressStreetUpdateAction(response.data));
+        this.getAddressStreets(dispatch, isLoading, response.data.cityId);
         return true;
       })
       .catch((error: any) => {
@@ -197,23 +341,49 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(streetIsLoadingAction({ isLoading: false }));
+        dispatch(addressStreetIsLoadingAction({ isLoading: false }));
       });
   }
 
-  async getBuildings(
+  async createActualAddressStreet(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    street: DtoCreateStreet
+  ) {
+    dispatch(actualAddressStreetIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoCreateStreet, { data: DtoStreetResponse }>(
+        "/address/street",
+        street
+      )
+      .then((response) => {
+        dispatch(actualAddressStreetUpdateAction(response.data));
+        this.getActualAddressStreets(dispatch, isLoading, response.data.cityId);
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressStreetIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getAddressBuildings(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     streetId: string
   ) {
     if (streetId !== "") {
-      dispatch(buildingIsLoadingAction({ isLoading: true }));
+      dispatch(addressBuildingIsLoadingAction({ isLoading: true }));
       this._axios
         .get<DtoBuildingResponse[]>("/address/building", {
           params: { streetId: streetId },
         })
         .then((response) => {
-          dispatch(buildingsUpdateAction(response.data));
+          dispatch(addressBuildingsUpdateAction(response.data));
           return true;
         })
         .catch((error: any) => {
@@ -221,19 +391,46 @@ export default class AddressService implements AddressInterface {
           // onShowErrorToast(error);
         })
         .finally(() => {
-          dispatch(buildingIsLoadingAction({ isLoading: false }));
+          dispatch(addressBuildingIsLoadingAction({ isLoading: false }));
         });
     } else {
-      buildingsUpdateAction([]);
+      addressBuildingsUpdateAction([]);
     }
   }
 
-  async createBuilding(
+  async getActualAddressBuildings(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    streetId: string
+  ) {
+    if (streetId !== "") {
+      dispatch(actualAddressBuildingIsLoadingAction({ isLoading: true }));
+      this._axios
+        .get<DtoBuildingResponse[]>("/address/building", {
+          params: { streetId: streetId },
+        })
+        .then((response) => {
+          dispatch(actualAddressBuildingsUpdateAction(response.data));
+          return true;
+        })
+        .catch((error: any) => {
+          return error;
+          // onShowErrorToast(error);
+        })
+        .finally(() => {
+          dispatch(actualAddressBuildingIsLoadingAction({ isLoading: false }));
+        });
+    } else {
+      actualAddressBuildingsUpdateAction([]);
+    }
+  }
+
+  async createAddressBuilding(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     building: DtoCreateBuilding
   ) {
-    dispatch(buildingIsLoadingAction({ isLoading: true }));
+    dispatch(addressBuildingIsLoadingAction({ isLoading: true }));
 
     this._axios
       .post<DtoCreateBuilding, { data: DtoBuildingResponse }>(
@@ -241,8 +438,8 @@ export default class AddressService implements AddressInterface {
         building
       )
       .then((response) => {
-        dispatch(buildingUpdateAction(response.data));
-        this.getBuildings(dispatch, isLoading, response.data.streetId);
+        dispatch(addressBuildingUpdateAction(response.data));
+        this.getAddressBuildings(dispatch, isLoading, response.data.streetId);
         return true;
       })
       .catch((error: any) => {
@@ -250,23 +447,53 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(buildingIsLoadingAction({ isLoading: false }));
+        dispatch(addressBuildingIsLoadingAction({ isLoading: false }));
       });
   }
 
-  async getFlats(
+  async createActualAddressBuilding(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    building: DtoCreateBuilding
+  ) {
+    dispatch(actualAddressBuildingIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoCreateBuilding, { data: DtoBuildingResponse }>(
+        "/address/building",
+        building
+      )
+      .then((response) => {
+        dispatch(actualAddressBuildingUpdateAction(response.data));
+        this.getActualAddressBuildings(
+          dispatch,
+          isLoading,
+          response.data.streetId
+        );
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressBuildingIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getAddressFlats(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     buildingId: string
   ) {
     if (buildingId !== "") {
-      dispatch(flatIsLoadingAction({ isLoading: true }));
+      dispatch(addressFlatIsLoadingAction({ isLoading: true }));
       this._axios
         .get<DtoFlatResponse[]>("/address/flat", {
           params: { buildingId: buildingId },
         })
         .then((response) => {
-          dispatch(flatsUpdateAction(response.data));
+          dispatch(addressFlatsUpdateAction(response.data));
           return true;
         })
         .catch((error: any) => {
@@ -274,25 +501,52 @@ export default class AddressService implements AddressInterface {
           // onShowErrorToast(error);
         })
         .finally(() => {
-          dispatch(flatIsLoadingAction({ isLoading: false }));
+          dispatch(addressFlatIsLoadingAction({ isLoading: false }));
         });
     } else {
-      flatsUpdateAction([]);
+      addressFlatsUpdateAction([]);
     }
   }
 
-  async createFlat(
+  async getActualAddressFlats(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    buildingId: string
+  ) {
+    if (buildingId !== "") {
+      dispatch(actualAddressFlatIsLoadingAction({ isLoading: true }));
+      this._axios
+        .get<DtoFlatResponse[]>("/address/flat", {
+          params: { buildingId: buildingId },
+        })
+        .then((response) => {
+          dispatch(actualAddressFlatsUpdateAction(response.data));
+          return true;
+        })
+        .catch((error: any) => {
+          return error;
+          // onShowErrorToast(error);
+        })
+        .finally(() => {
+          dispatch(actualAddressFlatIsLoadingAction({ isLoading: false }));
+        });
+    } else {
+      actualAddressFlatsUpdateAction([]);
+    }
+  }
+
+  async createAddressFlat(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,
     flat: DtoCreateFlat
   ) {
-    dispatch(flatIsLoadingAction({ isLoading: true }));
+    dispatch(addressFlatIsLoadingAction({ isLoading: true }));
 
     this._axios
       .post<DtoCreateFlat, { data: DtoFlatResponse }>("/address/flat", flat)
       .then((response) => {
-        dispatch(flatUpdateAction(response.data));
-        this.getFlats(dispatch, isLoading, response.data.buildingId);
+        dispatch(addressFlatUpdateAction(response.data));
+        this.getAddressFlats(dispatch, isLoading, response.data.buildingId);
         return true;
       })
       .catch((error: any) => {
@@ -300,7 +554,34 @@ export default class AddressService implements AddressInterface {
         // onShowErrorToast(error);
       })
       .finally(() => {
-        dispatch(flatIsLoadingAction({ isLoading: false }));
+        dispatch(addressFlatIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async createActualAddressFlat(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    flat: DtoCreateFlat
+  ) {
+    dispatch(actualAddressFlatIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .post<DtoCreateFlat, { data: DtoFlatResponse }>("/address/flat", flat)
+      .then((response) => {
+        dispatch(actualAddressFlatUpdateAction(response.data));
+        this.getActualAddressFlats(
+          dispatch,
+          isLoading,
+          response.data.buildingId
+        );
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(actualAddressFlatIsLoadingAction({ isLoading: false }));
       });
   }
 }
