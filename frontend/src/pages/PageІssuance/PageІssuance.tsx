@@ -10,8 +10,11 @@ import AddressService from '../../core/lib/services/AddressService';
 import { useAxios } from '../../hooks';
 import HumanService from '../../core/lib/services/HumanSearchService';
 import Avatar, { genConfig } from 'react-nice-avatar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InputMask from "react-input-mask";
+import { DtoCreateHuman } from '../../core/lib/dto/human';
+import moment from 'moment';
+import { log } from 'console';
 
 type Props = {
 
@@ -28,7 +31,7 @@ const ІssuanceSchema = Yup.object().shape({
 
 const PageІssuance = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [hasIpn, setHasIpn] = useState(true)
   const [hasActualAddress, setHasActualAddress] = useState(false)
 
@@ -215,6 +218,27 @@ const PageІssuance = () => {
   const handleButton = (prop: any) => {
     humanService.findHumans(dispatch, isLoading, human)
   };
+  const handleButtonCreateHuman = async (prop: any) => {
+
+
+    const humanCreate: DtoCreateHuman = {
+      surname: human.surname,
+      name: human.name,
+      patronymic: human.patronymic,
+      phone: human.phone,
+      ipn: human.ipn,
+      dateOfBirthday: moment(human.dateOfBirthday, 'DD.MM.YYYY').toDate(),
+      address: addressFlat._id,
+      actualAddress: hasActualAddress ? actualAddressFlat._id : addressFlat._id,
+      passportId: human.passportId,
+      comment: "",
+      blocked: false
+    }
+    const newHuman = await humanService.createHuman(dispatch, isLoading, humanCreate)
+
+    navigate("/human/" + newHuman._id)
+
+  };
 
 
 
@@ -237,6 +261,7 @@ const PageІssuance = () => {
                     id="surname"
                     autoComplete="family-name"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={human.surname}
                     onChange={handleChange("surname")}
                   />
                 </div>
@@ -251,6 +276,7 @@ const PageІssuance = () => {
                     id="name"
                     autoComplete="given-name"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={human.name}
                     onChange={handleChange("name")}
                   />
                 </div>
@@ -265,6 +291,7 @@ const PageІssuance = () => {
                     id="patronymic"
                     autoComplete="patronymic"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={human.patronymic}
                     onChange={handleChange("patronymic")}
                   />
                 </div>
@@ -278,6 +305,7 @@ const PageІssuance = () => {
                         name="hasIpn"
                         id="hasIpn"
                         className="mr-1  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+
                         onChange={(event) => setHasIpn(!event.target.checked)}
 
                       />
@@ -292,6 +320,7 @@ const PageІssuance = () => {
                       mask='9999999999'
                       value={human.ipn}
                       maskPlaceholder=""
+
                       onChange={handleChange("ipn")}
                     >
                       <input
@@ -307,6 +336,7 @@ const PageІssuance = () => {
                       mask={"aa999999"}
                       value={human.passportId.toUpperCase()}
                       maskPlaceholder=""
+
                       onChange={handleChange("passportId")}
                     >
                       <input
@@ -465,9 +495,8 @@ const PageІssuance = () => {
 
             <div className="bg-gray-50 px-4 py-3 text-center sm:px-6">
               <button
-
                 className="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                onClick={handleButton}
+                onClick={handleButtonCreateHuman}
               >
                 Створити
               </button>

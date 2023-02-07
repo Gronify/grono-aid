@@ -21,9 +21,14 @@ export class DistributionService {
   }
 
   async findAllByHumanId(humanId: string): Promise<Distribution[]> {
-    const distributions = await this.distributionModel.find({
-      humanId: humanId,
-    });
+    const distributions = await this.distributionModel
+      .find({
+        humanId: humanId,
+      })
+      .populate({
+        path: 'giftId',
+        model: 'Gift',
+      });
 
     return distributions;
   }

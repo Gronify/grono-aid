@@ -9,6 +9,8 @@ import {
   regionReducer,
   streetReducer,
   userReducer,
+  giftReducer,
+  distributionReducer,
 } from "../adapters";
 
 const rootReducer = combineReducers({
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   building: buildingReducer,
   flat: flatReducer,
   center: centerReducer,
+  gift: giftReducer,
+  distribution: distributionReducer,
 });
 
 const store = configureStore({

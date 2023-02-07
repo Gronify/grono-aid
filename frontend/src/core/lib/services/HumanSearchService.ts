@@ -1,14 +1,14 @@
 import { AxiosInstance } from "axios";
 
 import { Dispatch } from "react";
-import { AnyAction } from "@reduxjs/toolkit";
-import { humanSearchIsLoadingAction } from "../adapters";
+import { AnyAction, Observable } from "@reduxjs/toolkit";
+import { humanIsLoadingAction, humanSearchIsLoadingAction } from "../adapters";
 
 import {
   humansSearchUpdateAction,
   humanSearchUpdateAction,
 } from "../adapters/redux/slices/humanSearch";
-import { DtoHumanSearchResponse } from "../dto/human";
+import { DtoCreateHuman, DtoHumanSearchResponse } from "../dto/human";
 import { HumanEntityInterface } from "../entities/Human";
 
 export interface HumanInterface {
@@ -43,6 +43,27 @@ export default class HumanService implements HumanInterface {
       })
       .finally(() => {
         dispatch(humanSearchIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async createHuman(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    human: DtoCreateHuman
+  ): Promise<DtoHumanSearchResponse> {
+    dispatch(humanIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .post<DtoCreateHuman, { data: DtoHumanSearchResponse }>("/human", human)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(humanIsLoadingAction({ isLoading: false }));
       });
   }
 

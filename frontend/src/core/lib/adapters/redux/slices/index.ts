@@ -62,6 +62,18 @@ import centerReducer, {
   centersUpdateAction,
 } from "./center";
 
+import giftReducer, {
+  giftIsLoadingAction,
+  giftUpdateAction,
+  giftsUpdateAction,
+} from "./gift";
+
+import distributionReducer, {
+  distributionIsLoadingAction,
+  distributionUpdateAction,
+  distributionsUpdateAction,
+} from "./distribution";
+
 import humanReducer, { humanIsLoadingAction, humanUpdateAction } from "./human";
 
 export {
@@ -116,4 +128,12 @@ export {
   centerIsLoadingAction,
   centerUpdateAction,
   centersUpdateAction,
+  distributionReducer,
+  distributionIsLoadingAction,
+  distributionUpdateAction,
+  distributionsUpdateAction,
+  giftReducer,
+  giftIsLoadingAction,
+  giftUpdateAction,
+  giftsUpdateAction,
 };

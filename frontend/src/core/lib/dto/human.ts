@@ -41,3 +41,17 @@ export type DtoHumanSearchResponse = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type DtoCreateHuman = {
+  surname: string;
+  name: string;
+  patronymic: string;
+  phone: string;
+  ipn: string;
+  dateOfBirthday: Date;
+  address: string;
+  actualAddress: string;
+  passportId: string;
+  comment: string;
+  blocked: boolean;
+};

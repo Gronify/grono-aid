@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -25,5 +25,14 @@ export class DistributionController {
   ) {
     distributionDto.userId = user._id;
     return this.distributionService.create(distributionDto);
+  }
+
+  @ApiOperation({ summary: 'Get Distributions' })
+  @ApiResponse({ status: 200, type: Distribution })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get()
+  findByCenterId(@Query() query: { humanId: string }) {
+    return this.distributionService.findAllByHumanId(query.humanId);
   }
 }
