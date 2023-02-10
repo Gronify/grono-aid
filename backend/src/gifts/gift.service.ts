@@ -22,7 +22,6 @@ export class GiftService {
     centerId: mongoose.Schema.Types.ObjectId;
   }): Promise<Gift[]> {
     const gifts = await this.giftModel.find({ centerId: dto.centerId });
-
     return gifts;
   }
 }

@@ -18,10 +18,14 @@ export class CreateGiftDto {
   readonly measurement: string;
 
   @ApiProperty({
+    example: 'Units / kg / liters',
+    description: 'period of gift',
+  })
+  readonly period: number;
+
+  @ApiProperty({
     example: '63bcf652a3989d2896074cf0',
     description: 'center of gift',
   })
-  @IsDefined()
-  @IsNotEmpty()
   readonly centerId: mongoose.Schema.Types.ObjectId;
 }

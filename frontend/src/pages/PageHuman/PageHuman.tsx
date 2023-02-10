@@ -87,8 +87,8 @@ const PageHuman = () => {
           <h4 className="font-medium leading-tight text-2xl">Паспорт ID: {humanSearch.passportId}</h4>
           <h4 className="font-medium leading-tight text-2xl">Дата народження: {moment(humanSearch.dateOfBirthday).format('DD.MM.YYYY')}</h4>
           <h4 className="font-medium leading-tight text-2xl">Адреса: {humanSearch.address.buildingId.streetId.cityId.regionId.name}, {humanSearch.address.buildingId.streetId.cityId.name}, {humanSearch.address.buildingId.streetId.name}, {humanSearch.address.buildingId.name}/{humanSearch.address.name}</h4>
-          <h4 className="font-medium leading-tight text-2xl">Фактична адреса:</h4>
-          <h4 className="font-medium leading-tight text-2xl">ІПН: {humanSearch.comment}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Фактична адреса: {humanSearch.actualAddress.buildingId.streetId.cityId.regionId.name}, {humanSearch.actualAddress.buildingId.streetId.cityId.name}, {humanSearch.actualAddress.buildingId.streetId.name}, {humanSearch.actualAddress.buildingId.name}/{humanSearch.actualAddress.name}</h4>
+          <h4 className="font-medium leading-tight text-2xl">Коментар: {humanSearch.comment}</h4>
           <ol className="border-l border-gray-300">
 
             {distributions.map((distribution) => {

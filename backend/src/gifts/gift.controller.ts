@@ -19,11 +19,14 @@ export class GiftController {
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   @Post()
-  create(@Body() giftDto: CreateGiftDto) {
-    return this.giftService.create(giftDto);
+  create(@Body() giftDto: CreateGiftDto, @GetUser() user: User) {
+    console.log('====================================');
+    console.log(giftDto);
+    console.log('====================================');
+    return this.giftService.create({ ...giftDto, centerId: user.centerId });
   }
 
-  @ApiOperation({ summary: 'Create Center' })
+  @ApiOperation({ summary: 'Create Gift' })
   @ApiResponse({ status: 200, type: Gift })
   @Roles('ADMIN')
   @UseGuards(RolesGuard)

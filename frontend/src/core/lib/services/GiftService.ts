@@ -3,7 +3,7 @@ import { AxiosInstance } from "axios";
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { DtoGiftResponse } from "../dto/gift";
+import { DtoCreateGift, DtoGiftResponse } from "../dto/gift";
 import { giftIsLoadingAction, giftsUpdateAction } from "../adapters";
 
 export interface GiftInterface {
@@ -29,6 +29,32 @@ export default class GiftService implements GiftInterface {
       .then((response) => {
         dispatch(giftsUpdateAction(response.data));
         return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(giftIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async create(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    gift: DtoCreateGift
+  ): Promise<DtoGiftResponse> {
+    dispatch(giftIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .post<DtoCreateGift, { data: DtoGiftResponse }>("/gift", {
+        ...gift,
+        centerId: "",
+      })
+      .then((response) => {
+        this.getGifts(dispatch, isLoading);
+
+        return response.data;
       })
       .catch((error: any) => {
         return error;

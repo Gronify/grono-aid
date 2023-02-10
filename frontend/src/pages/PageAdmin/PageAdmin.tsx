@@ -13,6 +13,7 @@ import ReactNiceAvatar from 'react-nice-avatar';
 import { Fragment } from 'react'
 import { tab } from '@testing-library/user-event/dist/tab';
 import AddressManager from './AddressManager';
+import GiftManager from './GiftManager';
 
 type Props = {
 
@@ -127,6 +128,7 @@ const PageAdmin = () => {
 
 
       {tabs[1].current ? <CenterManager /> : null}
+      {tabs[2].current ? <GiftManager /> : null}
       {tabs[3].current ? <AddressManager /> : null}
 
 
