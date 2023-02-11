@@ -10,7 +10,7 @@ import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
 import { centerIsLoadingAction, centersUpdateAction } from "../adapters";
-import { DtoCenterResponse } from "../dto/center";
+import { DtoCenterResponse, DtoCreateCenter } from "../dto/center";
 
 export interface CenterInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -35,6 +35,35 @@ export default class CenterService implements CenterInterface {
       .then((response) => {
         dispatch(centersUpdateAction(response.data));
         return true;
+      })
+      .catch((error: any) => {
+        return error;
+        // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(centerIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async create(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    center: DtoCreateCenter
+  ): Promise<DtoCenterResponse> {
+    dispatch(centerIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .post<DtoCreateCenter, { data: DtoCenterResponse }>("/center", {
+        name: center.name,
+        address: center.address,
+        phone: center.phone,
+        director: center.director,
+        phoneDirector: center.phoneDirector,
+      })
+      .then((response) => {
+        this.getCenters(dispatch, isLoading);
+
+        return response.data;
       })
       .catch((error: any) => {
         return error;

@@ -11,6 +11,10 @@ const initialState: CenterState = {
   data: {
     _id: "",
     name: "",
+    address: "",
+    phone: "",
+    director: "",
+    phoneDirector: "",
   },
   centers: [],
   isLoading: false,
@@ -41,6 +45,10 @@ export const centerSlice = createSlice({
         data: {
           _id: center._id,
           name: center.name,
+          address: center.address,
+          phone: center.phone,
+          director: center.director,
+          phoneDirector: center.phoneDirector,
         },
       };
     },
