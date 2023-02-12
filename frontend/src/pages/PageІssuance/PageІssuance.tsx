@@ -15,6 +15,7 @@ import InputMask from "react-input-mask";
 import { DtoCreateHuman } from '../../core/lib/dto/human';
 import moment from 'moment';
 import { log } from 'console';
+import { useSnackbar } from 'notistack';
 
 type Props = {
 
@@ -43,7 +44,7 @@ const PageІssuance = () => {
 
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
 
-  const addressService = new AddressService(useAxios())
+  const addressService = new AddressService(useAxios(), useSnackbar())
   const humanService = new HumanService(useAxios())
 
   const addressRegion = useSelector((state: RootState) => state.region.addressRegion);
@@ -217,6 +218,7 @@ const PageІssuance = () => {
 
   const handleButton = (prop: any) => {
     humanService.findHumans(dispatch, isLoading, human)
+
   };
   const handleButtonCreateHuman = async (prop: any) => {
 

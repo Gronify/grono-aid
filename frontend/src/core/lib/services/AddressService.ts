@@ -55,19 +55,30 @@ import {
   DtoStreetResponse,
 } from "../dto/address";
 import { log } from "console";
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 export interface AddressInterface {
   //   login: (loginData: DtoUserLogin) => any;
 }
 
 export default class AddressService implements AddressInterface {
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
   //   constructor(tokenResponse?: DtoTokenResponse) {
   //     this._tokenResponse = tokenResponse;
   //     this._localStorageToken = new LocalStorageToken();
   //   }
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async getAddressRegions(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
@@ -77,6 +88,7 @@ export default class AddressService implements AddressInterface {
       .get<DtoRegionResponse[]>("/address/region")
       .then((response) => {
         dispatch(addressRegionsUpdateAction(response.data));
+
         return true;
       })
       .catch((error: any) => {
@@ -98,6 +110,7 @@ export default class AddressService implements AddressInterface {
       .get<DtoRegionResponse[]>("/address/region")
       .then((response) => {
         dispatch(actualAddressRegionsUpdateAction(response.data));
+
         return true;
       })
       .catch((error: any) => {
@@ -123,7 +136,11 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(addressRegionUpdateAction(response.data));
+        this._enqueueSnackbar("Регіон створенно!", {
+          variant: "success",
+        });
         this.getAddressRegions(dispatch, isLoading);
+
         return true;
       })
       .catch((error: any) => {
@@ -149,6 +166,9 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(actualAddressRegionUpdateAction(response.data));
+        this._enqueueSnackbar("Регіон створенно!", {
+          variant: "success",
+        });
         this.getActualAddressRegions(dispatch, isLoading);
         return true;
       })
@@ -226,6 +246,9 @@ export default class AddressService implements AddressInterface {
       .post<DtoCreateCity, { data: DtoCityResponse }>("/address/city", city)
       .then((response) => {
         dispatch(addressCityUpdateAction(response.data));
+        this._enqueueSnackbar("Населений пункт створенно!", {
+          variant: "success",
+        });
         this.getAddressCities(dispatch, isLoading, response.data.regionId);
         return true;
       })
@@ -249,6 +272,9 @@ export default class AddressService implements AddressInterface {
       .post<DtoCreateCity, { data: DtoCityResponse }>("/address/city", city)
       .then((response) => {
         dispatch(actualAddressCityUpdateAction(response.data));
+        this._enqueueSnackbar("Населений пункт створенно!", {
+          variant: "success",
+        });
         this.getActualAddressCities(
           dispatch,
           isLoading,
@@ -333,6 +359,9 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(addressStreetUpdateAction(response.data));
+        this._enqueueSnackbar("Вулицю створенно!", {
+          variant: "success",
+        });
         this.getAddressStreets(dispatch, isLoading, response.data.cityId);
         return true;
       })
@@ -359,6 +388,9 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(actualAddressStreetUpdateAction(response.data));
+        this._enqueueSnackbar("Вулицю створенно!", {
+          variant: "success",
+        });
         this.getActualAddressStreets(dispatch, isLoading, response.data.cityId);
         return true;
       })
@@ -439,6 +471,9 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(addressBuildingUpdateAction(response.data));
+        this._enqueueSnackbar("Будинок створенно!", {
+          variant: "success",
+        });
         this.getAddressBuildings(dispatch, isLoading, response.data.streetId);
         return true;
       })
@@ -465,6 +500,9 @@ export default class AddressService implements AddressInterface {
       )
       .then((response) => {
         dispatch(actualAddressBuildingUpdateAction(response.data));
+        this._enqueueSnackbar("Будинок створенно!", {
+          variant: "success",
+        });
         this.getActualAddressBuildings(
           dispatch,
           isLoading,
@@ -546,6 +584,9 @@ export default class AddressService implements AddressInterface {
       .post<DtoCreateFlat, { data: DtoFlatResponse }>("/address/flat", flat)
       .then((response) => {
         dispatch(addressFlatUpdateAction(response.data));
+        this._enqueueSnackbar("Квартира створенно!", {
+          variant: "success",
+        });
         this.getAddressFlats(dispatch, isLoading, response.data.buildingId);
         return true;
       })
@@ -569,6 +610,9 @@ export default class AddressService implements AddressInterface {
       .post<DtoCreateFlat, { data: DtoFlatResponse }>("/address/flat", flat)
       .then((response) => {
         dispatch(actualAddressFlatUpdateAction(response.data));
+        this._enqueueSnackbar("Квартира створенно!", {
+          variant: "success",
+        });
         this.getActualAddressFlats(
           dispatch,
           isLoading,
