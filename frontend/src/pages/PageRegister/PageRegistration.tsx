@@ -12,7 +12,7 @@ import CenterService from '../../core/lib/services/CenterService';
 import { centerUpdateAction } from '../../core/lib/adapters';
 import AuthService from '../../core/lib/services/AuthService';
 import { useNavigate } from 'react-router-dom';
-
+import InputMask from "react-input-mask";
 
 type Props = {
   signIn: (login: string, password: string) => void;
@@ -205,17 +205,22 @@ const PageRegistration = () => {
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Телефон
                   </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="phone"
-                    // autoComplete="email"
-                    required
-                    className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                    placeholder="phone"
+                  <InputMask
+                    mask='+389999999999'
                     value={values.phone}
+                    maskPlaceholder=""
                     onChange={handleChange("phone")}
-                  />
+                  >
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="phone"
+                      required
+                      className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      placeholder="phone"
+                    />
+                  </InputMask>
+
                 </div>
 
                 <div className="col-span-6">

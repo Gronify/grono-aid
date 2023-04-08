@@ -7,6 +7,7 @@ import { UserController } from './user.controller';
 
 import { UserService } from './user.service';
 import { Role, RoleSchema } from 'src/roles/schemas/roles.schema';
+import { DistributionModule } from 'src/givement/distribution.module';
 
 @Module({
   controllers: [UserController],
@@ -16,6 +17,7 @@ import { Role, RoleSchema } from 'src/roles/schemas/roles.schema';
     MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]),
 
     RolesModule,
+    DistributionModule,
     forwardRef(() => AuthModule),
   ],
   exports: [UserService],

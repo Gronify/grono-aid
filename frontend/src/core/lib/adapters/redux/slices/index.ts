@@ -76,6 +76,11 @@ import distributionReducer, {
 
 import humanReducer, { humanIsLoadingAction, humanUpdateAction } from "./human";
 
+import userShortStatReducer, {
+  userShortStatSliceIsLoadingAction,
+  userShortStatUpdateAction,
+} from "./userShortStat";
+
 export {
   userReducer,
   userSignInAction,
@@ -136,4 +141,7 @@ export {
   giftIsLoadingAction,
   giftUpdateAction,
   giftsUpdateAction,
+  userShortStatReducer,
+  userShortStatSliceIsLoadingAction,
+  userShortStatUpdateAction,
 };

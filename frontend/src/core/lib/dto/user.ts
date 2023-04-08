@@ -1,3 +1,4 @@
+import { DtoCenterResponse } from "./center";
 import { DtoRoleResponse } from "./role";
 
 export type DtoUserResponse = {
@@ -7,7 +8,7 @@ export type DtoUserResponse = {
   patronymic: string;
   phone: string;
   email: string;
-  center: string;
+  center: DtoCenterResponse;
   isBlocked: boolean;
   roles: DtoRoleResponse[];
 };
@@ -25,4 +26,9 @@ export type DtoUserRegister = {
   name: string;
   patronymic: string;
   phone: string;
+};
+
+export type DtoShortStatResponse = {
+  distributeToday: Number;
+  distributeThisMonth: Number;
 };

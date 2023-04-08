@@ -15,6 +15,7 @@ import { userSingOutAction } from './core/lib/adapters';
 import { RootState } from './core/lib/frameworks/redux';
 import { PageHuman } from './pages/PageHuman';
 import { PageAdmin } from './pages/PageAdmin';
+import { PageProfile } from './pages/PageProfile';
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
           </PrivateRoute>
         } />
         <Route path="/admin" element={<PageAdmin />} />
-
+        <Route path="/profile" element={<PageProfile />} />
       </Routes>
     </>
   );

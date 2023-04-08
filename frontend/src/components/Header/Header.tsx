@@ -1,8 +1,7 @@
 import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import * as React from 'react';
-import { Navigate } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { Link } from 'react-router-dom';
@@ -49,7 +48,7 @@ const Header = ({
     return classes.filter(Boolean).join(' ')
   }
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 mb-4">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -138,7 +137,7 @@ const Header = ({
                         <Menu.Item>
                           {({ active }) => (
                             <Link
-                              to="#"
+                              to="profile"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                             >
                               {user.surname} {user.name} {user.patronymic}

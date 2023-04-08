@@ -23,7 +23,14 @@ const initialState: UserState = {
     email: "",
     phone: "",
     isBlocked: false,
-    center: "",
+    center: {
+      _id: "",
+      name: "",
+      address: "",
+      phone: "",
+      director: "",
+      phoneDirector: "",
+    },
     roles: [],
   },
   isLoggedIn: new LocalStorageToken().hasAccessToken(),
@@ -59,7 +66,7 @@ export const userSlice = createSlice({
       service.signOut();
 
       return {
-        ...state,
+        ...initialState,
         isLoggedIn: false,
       };
     },

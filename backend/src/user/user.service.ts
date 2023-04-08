@@ -5,18 +5,26 @@ import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { DistributionService } from 'src/givement/distribution.service';
+import * as moment from 'moment';
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private roleService: RolesService,
+    private distributionService: DistributionService,
   ) {}
 
   async create(dto: CreateUserDto): Promise<User> {
     const role = await this.roleService.getRoleByValue('USER');
-    const user = await this.userModel.create(dto);
+    let user = await this.userModel.create(dto);
     user.roles.push(role);
     await user.save();
+    user = await this.userModel
+      .findOne({
+        _id: user._id,
+      })
+      .populate({ path: 'centerId', model: 'Center' });
 
     return user;
   }
@@ -27,9 +35,20 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    const user = await this.userModel.findOne({
-      email: email,
-    });
+    const user = await this.userModel
+      .findOne({
+        email: email,
+      })
+      .populate({ path: 'centerId', model: 'Center' });
+    return user;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.userModel
+      .findOne({
+        _id: id,
+      })
+      .populate({ path: 'centerId', model: 'Center' });
     return user;
   }
 
@@ -41,5 +60,28 @@ export class UserService {
       return dto;
     }
     throw new HttpException('User or role not exist', HttpStatus.NOT_FOUND);
+  }
+
+  async getShortStatByUserId(id: string): Promise<{
+    distributeToday: Number;
+    distributeThisMonth: Number;
+  }> {
+    const distributeToday =
+      await this.distributionService.amountByUserIdBetweenDates(
+        id,
+        moment().startOf('day').toDate(),
+        moment().endOf('day').toDate(),
+      );
+    const distributeThisMonth =
+      await this.distributionService.amountByUserIdBetweenDates(
+        id,
+        moment().startOf('month').toDate(),
+        moment().endOf('month').toDate(),
+      );
+
+    return {
+      distributeToday: distributeToday,
+      distributeThisMonth: distributeThisMonth,
+    };
   }
 }

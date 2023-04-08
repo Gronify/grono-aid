@@ -1,4 +1,5 @@
 import mongoose, { Model } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
@@ -53,5 +54,36 @@ export class DistributionService {
     });
 
     return distributions;
+  }
+
+  async amountByUserIdBetweenDates(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<Number> {
+    // const distributions = await this.distributionModel.count({
+    //   userId: userId,
+    //   createdAt: {
+    //     $gte: startDate,
+    //     $lte: endDate,
+    //   },
+    // });
+
+    const distributions = await this.distributionModel.aggregate([
+      {
+        $match: {
+          userId: new ObjectId(userId),
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$amount' },
+        },
+      },
+    ]);
+
+    return distributions[0].totalAmount;
   }
 }

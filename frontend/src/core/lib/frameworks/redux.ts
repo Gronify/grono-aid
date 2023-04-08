@@ -11,6 +11,7 @@ import {
   userReducer,
   giftReducer,
   distributionReducer,
+  userShortStatReducer,
 } from "../adapters";
 
 const rootReducer = combineReducers({
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   center: centerReducer,
   gift: giftReducer,
   distribution: distributionReducer,
+  userShortStat: userShortStatReducer,
 });
 
 const store = configureStore({

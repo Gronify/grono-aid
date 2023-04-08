@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
@@ -35,5 +35,23 @@ export class UserController {
   @Post('/role')
   addRole(@Body() dto: AddRoleDto) {
     return this.userService.addRole(dto);
+  }
+
+  @ApiOperation({ summary: 'Get User By id' })
+  @ApiResponse({ status: 200 })
+  @UseGuards(RolesGuard)
+  @Roles('USER')
+  @Get('/id')
+  getUserById(@Query() query: { _id: string }) {
+    return this.userService.getUserById(query._id);
+  }
+
+  @ApiOperation({ summary: 'Get Short Stat By User id' })
+  @ApiResponse({ status: 200 })
+  @UseGuards(RolesGuard)
+  @Roles('USER')
+  @Get('/shortStat')
+  getShortStatByUserId(@Query() query: { _id: string }) {
+    return this.userService.getShortStatByUserId(query._id);
   }
 }
