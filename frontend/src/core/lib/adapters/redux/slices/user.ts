@@ -23,7 +23,7 @@ const initialState: UserState = {
     email: "",
     phone: "",
     isBlocked: false,
-    center: {
+    centerId: {
       _id: "",
       name: "",
       address: "",
@@ -84,7 +84,7 @@ export const userSlice = createSlice({
           phone: user.phone,
           email: user.email,
           isBlocked: user.isBlocked,
-          center: user.center,
+          centerId: user.centerId,
           roles: <RoleEntityInterface[]>user.roles,
         },
       };

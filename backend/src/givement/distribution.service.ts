@@ -60,7 +60,7 @@ export class DistributionService {
     userId: string,
     startDate: Date,
     endDate: Date,
-  ): Promise<Number> {
+  ) {
     // const distributions = await this.distributionModel.count({
     //   userId: userId,
     //   createdAt: {
@@ -77,13 +77,28 @@ export class DistributionService {
         },
       },
       {
+        $lookup: {
+          from: 'gifts',
+          localField: 'giftId',
+          foreignField: '_id',
+          as: 'gift',
+        },
+      },
+      {
+        $unwind: '$gift',
+      },
+      {
         $group: {
-          _id: null,
+          _id: '$gift._id',
+          name: { $first: '$gift.name' },
+          description: { $first: '$gift.description' },
+          measurement: { $first: '$gift.measurement' },
           totalAmount: { $sum: '$amount' },
+          totalCount: { $sum: 1 },
         },
       },
     ]);
 
-    return distributions[0].totalAmount;
+    return distributions;
   }
 }

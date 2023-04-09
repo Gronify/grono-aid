@@ -358,7 +358,7 @@ const PageІssuance = () => {
                   <InputMask
                     mask='99.99.9999'
                     value={human.dateOfBirthday}
-                    placeholder="23.08.2002"
+                    placeholder="31.08.1997"
                     maskPlaceholder=""
                     onChange={handleChange("dateOfBirthday")}
                   >

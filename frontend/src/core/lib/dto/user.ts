@@ -8,7 +8,7 @@ export type DtoUserResponse = {
   patronymic: string;
   phone: string;
   email: string;
-  center: DtoCenterResponse;
+  centerId: DtoCenterResponse;
   isBlocked: boolean;
   roles: DtoRoleResponse[];
 };
@@ -28,7 +28,15 @@ export type DtoUserRegister = {
   phone: string;
 };
 
+export interface DtoUserShortStat {
+  _id: string;
+  name: string;
+  description: string;
+  measurement: string;
+  totalAmount: number;
+  totalCount: number;
+}
 export type DtoShortStatResponse = {
-  distributeToday: Number;
-  distributeThisMonth: Number;
+  distributeToday: DtoUserShortStat[];
+  distributeThisMonth: DtoUserShortStat[];
 };

@@ -13,8 +13,26 @@ interface UserShortStatState {
 
 const initialState: UserShortStatState = {
   data: {
-    distributeToday: 0,
-    distributeThisMonth: 0,
+    distributeToday: [
+      {
+        _id: "",
+        name: "",
+        description: "",
+        measurement: "",
+        totalAmount: 0,
+        totalCount: 0,
+      },
+    ],
+    distributeThisMonth: [
+      {
+        _id: "",
+        name: "",
+        description: "",
+        measurement: "",
+        totalAmount: 0,
+        totalCount: 0,
+      },
+    ],
   },
   isLoading: false,
 };

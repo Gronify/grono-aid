@@ -15,6 +15,8 @@ type Props = {
   isLoading: boolean;
 }
 
+
+
 const PageProfile = () => {
 
   const dispatch = useDispatch()
@@ -54,8 +56,21 @@ const PageProfile = () => {
                   <h4 className="font-medium leading-tight text-2xl">Ім'я: {user.name}</h4>
                   <h4 className="font-medium leading-tight text-2xl">Побатькові: {user.patronymic}</h4>
                   <h4 className="font-medium leading-tight text-2xl">Телефон: {user.phone}</h4>
-                  <h4 className="font-medium leading-tight text-2xl">Видано за день: {userShortStat.distributeToday.toString()}</h4>
-                  <h4 className="font-medium leading-tight text-2xl">Видано за поточний місяць: {userShortStat.distributeThisMonth.toString()}</h4>
+                  <br />
+                  <h4 className="font-medium leading-tight text-2xl">Видано за день: </h4>
+                  {userShortStat.distributeToday.map((distribute) => {
+                    return (<><h3 className="font-medium leading-tight text-lg">{distribute.name} - {distribute.measurement} </h3>
+                      <h2 className="font-medium leading-tight text-base">Кількість одиниць: {distribute.totalAmount} </h2>
+                      <h2 className="font-medium leading-tight text-base">Кількість видач: {distribute.totalCount} </h2></>)
+                  })}
+                  <br />
+                  <h4 className="font-medium leading-tight text-2xl">Видано за місяць: </h4>
+                  {userShortStat.distributeThisMonth.map((distribute) => {
+                    return (<><h3 className="font-medium leading-tight text-lg">{distribute.name} - {distribute.measurement} </h3>
+                      <h2 className="font-medium leading-tight text-base">Кількість одиниць: {distribute.totalAmount} </h2>
+                      <h2 className="font-medium leading-tight text-base">Кількість видач: {distribute.totalCount} </h2></>)
+                  })}
+
                 </div>
               </div>
             </div>

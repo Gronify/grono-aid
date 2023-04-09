@@ -63,8 +63,8 @@ export class UserService {
   }
 
   async getShortStatByUserId(id: string): Promise<{
-    distributeToday: Number;
-    distributeThisMonth: Number;
+    distributeToday: any;
+    distributeThisMonth: any;
   }> {
     const distributeToday =
       await this.distributionService.amountByUserIdBetweenDates(

@@ -13,6 +13,8 @@ export class GiftService {
   ) {}
 
   async create(dto: CreateGiftDto): Promise<Gift> {
+    console.log(dto);
+
     const gift = await this.giftModel.create({ ...dto });
 
     return gift;

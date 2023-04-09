@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, SchemaTypes } from 'mongoose';
+import { Center } from 'src/center/schemas/center.schema';
 import { Role } from 'src/roles/schemas/roles.schema';
 
 export type UserDocument = User & Document;
@@ -44,7 +45,7 @@ export class User {
       required: true,
     },
   })
-  centerId: mongoose.Schema.Types.ObjectId;
+  centerId: Center;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

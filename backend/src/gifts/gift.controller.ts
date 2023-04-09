@@ -20,10 +20,7 @@ export class GiftController {
   @UseGuards(RolesGuard)
   @Post()
   create(@Body() giftDto: CreateGiftDto, @GetUser() user: User) {
-    console.log('====================================');
-    console.log(giftDto);
-    console.log('====================================');
-    return this.giftService.create({ ...giftDto, centerId: user.centerId });
+    return this.giftService.create({ ...giftDto, centerId: user.centerId._id });
   }
 
   @ApiOperation({ summary: 'Create Gift' })
@@ -32,6 +29,6 @@ export class GiftController {
   @UseGuards(RolesGuard)
   @Get()
   findByCenterId(@GetUser() user: User) {
-    return this.giftService.findByCenterId({ centerId: user.centerId });
+    return this.giftService.findByCenterId({ centerId: user.centerId._id });
   }
 }

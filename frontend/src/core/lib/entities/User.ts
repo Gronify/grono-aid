@@ -21,11 +21,19 @@ export interface UserEntityInterface {
   phone: string;
   email: string;
   isBlocked: boolean;
-  center: CenterEntityInterface;
+  centerId: CenterEntityInterface;
   roles: RoleEntityInterface[];
+}
+export interface UserShortStatObjectEntityInterface {
+  _id: string;
+  name: string;
+  description: string;
+  measurement: string;
+  totalAmount: number;
+  totalCount: number;
 }
 
 export interface UserShortStatEntityInterface {
-  distributeToday: Number;
-  distributeThisMonth: Number;
+  distributeToday: UserShortStatObjectEntityInterface[];
+  distributeThisMonth: UserShortStatObjectEntityInterface[];
 }
