@@ -11,20 +11,30 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
 import { centerIsLoadingAction, centersUpdateAction } from "../adapters";
 import { DtoCenterResponse, DtoCreateCenter } from "../dto/center";
-
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 export interface CenterInterface {
   //   login: (loginData: DtoUserLogin) => any;
 }
 
 export default class CenterService implements CenterInterface {
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
   //   constructor(tokenResponse?: DtoTokenResponse) {
   //     this._tokenResponse = tokenResponse;
   //     this._localStorageToken = new LocalStorageToken();
   //   }
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async getCenters(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
@@ -38,7 +48,6 @@ export default class CenterService implements CenterInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(centerIsLoadingAction({ isLoading: false }));
@@ -66,8 +75,10 @@ export default class CenterService implements CenterInterface {
         return response.data;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(centerIsLoadingAction({ isLoading: false }));

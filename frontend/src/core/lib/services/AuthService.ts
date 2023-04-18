@@ -14,6 +14,12 @@ import { RootState } from "../frameworks/redux";
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 export interface AuthInterface {
   //   login: (loginData: DtoUserLogin) => any;
 }
@@ -21,13 +27,18 @@ export interface AuthInterface {
 export default class AuthService implements AuthInterface {
   private _tokenResponse?: DtoTokenResponse;
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
   //   constructor(tokenResponse?: DtoTokenResponse) {
   //     this._tokenResponse = tokenResponse;
   //     this._localStorageToken = new LocalStorageToken();
   //   }
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   parseJwt(): UserEntityInterface {
@@ -66,8 +77,10 @@ export default class AuthService implements AuthInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(userIsLoadingAction({ isLoading: false }));
@@ -95,8 +108,10 @@ export default class AuthService implements AuthInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(userIsLoadingAction({ isLoading: false }));

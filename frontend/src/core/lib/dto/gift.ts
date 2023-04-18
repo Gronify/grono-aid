@@ -12,4 +12,5 @@ export type DtoCreateGift = {
   description: string;
   period: number;
   measurement: string;
+  centerId: string;
 };

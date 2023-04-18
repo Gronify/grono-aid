@@ -12,7 +12,7 @@ import moment from 'moment';
 import GiftService from '../../core/lib/services/GiftService';
 import { Autocomplete } from '../../components/Autocomplete';
 import DistributionService from '../../core/lib/services/DistributionService';
-
+import { useSnackbar } from 'notistack';
 
 
 type Props = {
@@ -37,13 +37,13 @@ const PageHuman = () => {
   const gift = useSelector((state: RootState) => state.gift.data)
   const gifts = useSelector((state: RootState) => state.gift.gifts)
   const giftIsLoading = useSelector((state: RootState) => state.gift.isLoading)
-  const humanService = new HumanService(useAxios())
-  const giftService = new GiftService(useAxios())
+  const humanService = new HumanService(useAxios(), useSnackbar())
+  const giftService = new GiftService(useAxios(), useSnackbar())
   const distribution = useSelector((state: RootState) => state.distribution.data)
   const distributions = useSelector((state: RootState) => state.distribution.distributions)
   const distributionIsLoading = useSelector((state: RootState) => state.distribution.isLoading)
 
-  const distributionService = new DistributionService(useAxios())
+  const distributionService = new DistributionService(useAxios(), useSnackbar())
 
   useEffect(() => {
     humanService.findHumanById(dispatch, isLoading, id)

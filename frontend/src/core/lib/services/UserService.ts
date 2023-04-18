@@ -38,7 +38,6 @@ export default class UserService implements UserInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(userIsLoadingAction({ isLoading: false }));
@@ -62,7 +61,6 @@ export default class UserService implements UserInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(userShortStatSliceIsLoadingAction({ isLoading: false }));

@@ -8,6 +8,7 @@ import { centerUpdateAction, humanUpdateAction } from '../../core/lib/adapters';
 import InputMask from "react-input-mask";
 import CenterService from '../../core/lib/services/CenterService';
 import { useAxios } from '../../hooks';
+import { useSnackbar } from 'notistack';
 
 type Props = {
 
@@ -34,7 +35,7 @@ const CenterManager = () => {
   const centers = useSelector((state: RootState) => state.center.centers);
   const isLoading = useSelector((state: RootState) => state.center.isLoading);
 
-  const centerService = new CenterService(useAxios())
+  const centerService = new CenterService(useAxios(), useSnackbar())
   useEffect(() => {
     centerService.getCenters(dispatch, isLoading)
 

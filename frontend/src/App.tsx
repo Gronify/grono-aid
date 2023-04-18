@@ -25,14 +25,12 @@ function App() {
     dispatch(userSingOutAction())
   }
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   navigate("/")
+  useEffect(() => {
+    navigate("/")
+    return () => {
 
-
-  //   return () => {
-
-  //   }
-  // }, [userIsLoggedIn])
+    }
+  }, [userIsLoggedIn])
 
   return (
     <>

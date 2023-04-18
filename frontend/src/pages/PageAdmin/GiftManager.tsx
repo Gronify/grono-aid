@@ -7,6 +7,7 @@ import { RootState } from '../../core/lib/frameworks/redux';
 import { giftUpdateAction, humanUpdateAction } from '../../core/lib/adapters';
 import { useAxios } from '../../hooks';
 import GiftService from '../../core/lib/services/GiftService';
+import { useSnackbar } from 'notistack';
 
 
 type Props = {
@@ -28,11 +29,12 @@ const GiftSchema = Yup.object().shape({
 // phoneDirector: string;
 
 const GiftManager = () => {
+  const user = useSelector((state: RootState) => state.user.data)
   const gift = useSelector((state: RootState) => state.gift.data)
   const gifts = useSelector((state: RootState) => state.gift.gifts)
   const giftIsLoading = useSelector((state: RootState) => state.gift.isLoading)
   const dispatch = useDispatch();
-  const giftService = new GiftService(useAxios())
+  const giftService = new GiftService(useAxios(), useSnackbar())
 
   useEffect(() => {
     giftService.getGifts(dispatch, giftIsLoading)
@@ -42,8 +44,9 @@ const GiftManager = () => {
     dispatch(giftUpdateAction({ ...gift, [prop]: event.target.value }))
   };
 
+
   const handleButton = (prop: any) => {
-    giftService.create(dispatch, giftIsLoading, { name: gift.name, description: gift.description, period: gift.period, measurement: gift.measurement })
+    giftService.create(dispatch, giftIsLoading, { name: gift.name, description: gift.description, period: gift.period, measurement: gift.measurement, centerId: user.centerId._id })
   };
 
 
@@ -61,6 +64,7 @@ const GiftManager = () => {
                 name="giftName"
                 id="giftName"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={gift.name}
                 onChange={handleChange("name")}
               />
             </div>
@@ -74,6 +78,7 @@ const GiftManager = () => {
                 name="measurement"
                 id="measurement"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={gift.measurement}
                 onChange={handleChange("measurement")}
               />
             </div>
@@ -87,6 +92,7 @@ const GiftManager = () => {
                 name="description"
                 id="description"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={gift.description}
                 onChange={handleChange("description")}
               />
             </div>
@@ -100,6 +106,7 @@ const GiftManager = () => {
                 name="period"
                 id="period"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={gift.period}
                 onChange={handleChange("period")}
               />
             </div>

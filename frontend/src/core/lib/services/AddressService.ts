@@ -54,7 +54,6 @@ import {
   DtoRegionResponse,
   DtoStreetResponse,
 } from "../dto/address";
-import { log } from "console";
 import {
   OptionsObject,
   ProviderContext,
@@ -93,7 +92,6 @@ export default class AddressService implements AddressInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressRegionIsLoadingAction({ isLoading: false }));
@@ -115,7 +113,6 @@ export default class AddressService implements AddressInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressRegionIsLoadingAction({ isLoading: false }));
@@ -144,8 +141,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressRegionIsLoadingAction({ isLoading: false }));
@@ -173,8 +172,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressRegionIsLoadingAction({ isLoading: false }));
@@ -198,7 +199,6 @@ export default class AddressService implements AddressInterface {
         })
         .catch((error: any) => {
           return error;
-          // onShowErrorToast(error);
         })
         .finally(() => {
           dispatch(addressCityIsLoadingAction({ isLoading: false }));
@@ -253,8 +253,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressCityIsLoadingAction({ isLoading: false }));
@@ -283,8 +285,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressCityIsLoadingAction({ isLoading: false }));
@@ -366,8 +370,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressStreetIsLoadingAction({ isLoading: false }));
@@ -395,8 +401,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressStreetIsLoadingAction({ isLoading: false }));
@@ -446,8 +454,10 @@ export default class AddressService implements AddressInterface {
           return true;
         })
         .catch((error: any) => {
+          this._enqueueSnackbar("Помилка!", {
+            variant: "error",
+          });
           return error;
-          // onShowErrorToast(error);
         })
         .finally(() => {
           dispatch(actualAddressBuildingIsLoadingAction({ isLoading: false }));
@@ -478,8 +488,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressBuildingIsLoadingAction({ isLoading: false }));
@@ -511,8 +523,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressBuildingIsLoadingAction({ isLoading: false }));
@@ -562,8 +576,10 @@ export default class AddressService implements AddressInterface {
           return true;
         })
         .catch((error: any) => {
+          this._enqueueSnackbar("Помилка!", {
+            variant: "error",
+          });
           return error;
-          // onShowErrorToast(error);
         })
         .finally(() => {
           dispatch(actualAddressFlatIsLoadingAction({ isLoading: false }));
@@ -591,8 +607,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(addressFlatIsLoadingAction({ isLoading: false }));
@@ -621,8 +639,10 @@ export default class AddressService implements AddressInterface {
         return true;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(actualAddressFlatIsLoadingAction({ isLoading: false }));

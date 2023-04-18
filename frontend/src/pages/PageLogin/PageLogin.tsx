@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { userIsLoadingAction } from '../../core/lib/adapters';
 import { Link } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 type Props = {
   signIn: (login: string, password: string) => void;
@@ -30,7 +31,7 @@ const PageLogin = () => {
 
   });
   const navigate = useNavigate();
-  const authService = new AuthService(useAxios())
+  const authService = new AuthService(useAxios(), useSnackbar())
   const dispatch = useDispatch();
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
   const userIsLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);

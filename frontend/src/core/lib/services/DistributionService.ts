@@ -14,6 +14,12 @@ import {
   DtoCreateDistribution,
   DtoDistributionResponse,
 } from "../dto/distribution";
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 
 export interface DistributionInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -21,13 +27,14 @@ export interface DistributionInterface {
 
 export default class DistributionService implements DistributionInterface {
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
-  //   constructor(tokenResponse?: DtoTokenResponse) {
-  //     this._tokenResponse = tokenResponse;
-  //     this._localStorageToken = new LocalStorageToken();
-  //   }
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async getDistributions(
@@ -47,7 +54,6 @@ export default class DistributionService implements DistributionInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(distributionIsLoadingAction({ isLoading: false }));
@@ -72,8 +78,10 @@ export default class DistributionService implements DistributionInterface {
         return response.data;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(distributionIsLoadingAction({ isLoading: false }));

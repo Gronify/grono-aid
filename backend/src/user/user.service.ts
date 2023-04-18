@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import { DistributionService } from 'src/givement/distribution.service';
 import * as moment from 'moment';
+import mongoose from 'mongoose';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -17,7 +19,10 @@ export class UserService {
 
   async create(dto: CreateUserDto): Promise<User> {
     const role = await this.roleService.getRoleByValue('USER');
-    let user = await this.userModel.create(dto);
+
+    let user = await this.userModel.create({
+      ...dto,
+    });
     user.roles.push(role);
     await user.save();
     user = await this.userModel

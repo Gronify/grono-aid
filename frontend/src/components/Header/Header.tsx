@@ -9,6 +9,7 @@ import Avatar, { genConfig } from 'react-nice-avatar'
 import { userUpdateAction } from '../../core/lib/adapters';
 import AuthService from '../../core/lib/services/AuthService';
 import { useAxios } from '../../hooks';
+import { useSnackbar } from 'notistack';
 
 interface PrivateRouteProps {
   children: JSX.Element
@@ -38,7 +39,7 @@ const Header = ({
   const dispatch = useDispatch()
   const userIsLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const user = useSelector((state: RootState) => state.user.data);
-  const authService = new AuthService(useAxios());
+  const authService = new AuthService(useAxios(), useSnackbar());
 
   useEffect(() => {
     dispatch(userUpdateAction(authService.parseJwt()));

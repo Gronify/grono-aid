@@ -4,7 +4,18 @@ import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { DtoCreateGift, DtoGiftResponse } from "../dto/gift";
-import { giftIsLoadingAction, giftsUpdateAction } from "../adapters";
+import {
+  giftIsLoadingAction,
+  giftUpdateAction,
+  giftsUpdateAction,
+} from "../adapters";
+
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 
 export interface GiftInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -12,13 +23,17 @@ export interface GiftInterface {
 
 export default class GiftService implements GiftInterface {
   private _axios: AxiosInstance;
-
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
   //   constructor(tokenResponse?: DtoTokenResponse) {
   //     this._tokenResponse = tokenResponse;
   //     this._localStorageToken = new LocalStorageToken();
   //   }
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async getGifts(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
@@ -32,7 +47,6 @@ export default class GiftService implements GiftInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(giftIsLoadingAction({ isLoading: false }));
@@ -49,16 +63,26 @@ export default class GiftService implements GiftInterface {
     return this._axios
       .post<DtoCreateGift, { data: DtoGiftResponse }>("/gift", {
         ...gift,
-        centerId: "",
       })
       .then((response) => {
+        dispatch(
+          giftUpdateAction({
+            _id: "",
+            name: "",
+            description: "",
+            period: 0,
+            measurement: "",
+            centerId: "",
+          })
+        );
         this.getGifts(dispatch, isLoading);
-
         return response.data;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(giftIsLoadingAction({ isLoading: false }));

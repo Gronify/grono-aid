@@ -45,7 +45,7 @@ const PageІssuance = () => {
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
 
   const addressService = new AddressService(useAxios(), useSnackbar())
-  const humanService = new HumanService(useAxios())
+  const humanService = new HumanService(useAxios(), useSnackbar())
 
   const addressRegion = useSelector((state: RootState) => state.region.addressRegion);
   const actualAddressRegion = useSelector((state: RootState) => state.region.actualAddressRegion);

@@ -50,9 +50,9 @@ export const useAxios = (): AxiosInstance => {
             return axiosInstance.request(originalRequest);
           })
           .catch((e) => {
-            console.log(e);
             dispatch(userSingOutAction());
             localStorage.removeItem("token");
+            console.log(e);
             console.log("Unauthorized");
           });
       } catch (e) {

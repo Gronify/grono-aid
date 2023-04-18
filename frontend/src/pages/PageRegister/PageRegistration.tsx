@@ -13,6 +13,7 @@ import { centerUpdateAction } from '../../core/lib/adapters';
 import AuthService from '../../core/lib/services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import InputMask from "react-input-mask";
+import { useSnackbar } from 'notistack';
 
 type Props = {
   signIn: (login: string, password: string) => void;
@@ -52,8 +53,8 @@ const PageRegistration = () => {
 
   const dispatch = useDispatch();
   const axios = useAxios()
-  const addressService = new CenterService(useAxios())
-  const authService = new AuthService(useAxios())
+  const addressService = new CenterService(useAxios(), useSnackbar())
+  const authService = new AuthService(useAxios(), useSnackbar())
   const navigate = useNavigate();
 
   useEffect(() => {

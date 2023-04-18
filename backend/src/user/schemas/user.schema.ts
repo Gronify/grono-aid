@@ -39,11 +39,9 @@ export class User {
   roles: Role[];
 
   @Prop({
-    types: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Center',
-      required: true,
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Center',
+    required: true,
   })
   centerId: Center;
 }

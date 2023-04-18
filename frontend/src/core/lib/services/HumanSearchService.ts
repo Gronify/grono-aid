@@ -10,6 +10,12 @@ import {
 } from "../adapters/redux/slices/humanSearch";
 import { DtoCreateHuman, DtoHumanSearchResponse } from "../dto/human";
 import { HumanEntityInterface } from "../entities/Human";
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
 
 export interface HumanInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -17,9 +23,14 @@ export interface HumanInterface {
 
 export default class HumanService implements HumanInterface {
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async findHumans(
