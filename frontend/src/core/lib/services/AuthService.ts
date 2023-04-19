@@ -7,10 +7,7 @@ import {
 } from "../adapters";
 import { DtoTokenResponse } from "../dto/token";
 import { DtoUserLogin, DtoUserRegister } from "../dto/user";
-import { useAxios } from "../../../hooks";
 import { AxiosInstance } from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../frameworks/redux";
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
@@ -32,10 +29,6 @@ export default class AuthService implements AuthInterface {
     options?: OptionsObject | undefined
   ) => SnackbarKey;
 
-  //   constructor(tokenResponse?: DtoTokenResponse) {
-  //     this._tokenResponse = tokenResponse;
-  //     this._localStorageToken = new LocalStorageToken();
-  //   }
   constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
     this._enqueueSnackbar = snackbar.enqueueSnackbar;

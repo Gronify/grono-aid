@@ -27,10 +27,7 @@ export default class GiftService implements GiftInterface {
     message: SnackbarMessage,
     options?: OptionsObject | undefined
   ) => SnackbarKey;
-  //   constructor(tokenResponse?: DtoTokenResponse) {
-  //     this._tokenResponse = tokenResponse;
-  //     this._localStorageToken = new LocalStorageToken();
-  //   }
+
   constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
     this._enqueueSnackbar = snackbar.enqueueSnackbar;
@@ -76,6 +73,9 @@ export default class GiftService implements GiftInterface {
           })
         );
         this.getGifts(dispatch, isLoading);
+        this._enqueueSnackbar("Вид допомоги створенно!", {
+          variant: "success",
+        });
         return response.data;
       })
       .catch((error: any) => {

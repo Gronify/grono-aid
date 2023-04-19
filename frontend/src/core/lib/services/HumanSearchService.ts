@@ -50,7 +50,6 @@ export default class HumanService implements HumanInterface {
       })
       .catch((error: any) => {
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(humanSearchIsLoadingAction({ isLoading: false }));
@@ -67,11 +66,16 @@ export default class HumanService implements HumanInterface {
     return this._axios
       .post<DtoCreateHuman, { data: DtoHumanSearchResponse }>("/human", human)
       .then((response) => {
+        this._enqueueSnackbar("Людина створенна!", {
+          variant: "success",
+        });
         return response.data;
       })
       .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
         return error;
-        // onShowErrorToast(error);
       })
       .finally(() => {
         dispatch(humanIsLoadingAction({ isLoading: false }));

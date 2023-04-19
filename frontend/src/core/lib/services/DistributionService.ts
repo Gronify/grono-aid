@@ -74,7 +74,9 @@ export default class DistributionService implements DistributionInterface {
       )
       .then((response) => {
         this.getDistributions(dispatch, isLoading, response.data.humanId);
-
+        this._enqueueSnackbar("Успішно!", {
+          variant: "success",
+        });
         return response.data;
       })
       .catch((error: any) => {

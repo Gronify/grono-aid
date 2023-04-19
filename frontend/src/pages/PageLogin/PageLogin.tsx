@@ -73,15 +73,9 @@ const PageLogin = () => {
               alt="Your Company"
             />
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to your account
+              Увійдіть у свій обліковий запис
             </h2>
-            <div className="text-sm">
-              <Link to="/registration" className="font-medium text-indigo-600 hover:text-indigo-500">
 
-                Регистрація
-              </Link>
-
-            </div>
           </div>
 
           <input type="hidden" name="remember" defaultValue="true" />
@@ -140,7 +134,7 @@ const PageLogin = () => {
             </div>
           </div>
 
-          <div>
+          <div className='grid gap-2'>
             <button
 
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -150,10 +144,21 @@ const PageLogin = () => {
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
               </span>
-              Sign in
+              Вхід
+            </button>
+            <button
+
+              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={() => navigate("/registration")}
+
+            >
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
+              </span>
+
+              Реєстрація
             </button>
           </div>
-
         </div>
       </div>
     </>

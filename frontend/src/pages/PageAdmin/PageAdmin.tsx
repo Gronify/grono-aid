@@ -14,6 +14,7 @@ import { Fragment } from 'react'
 import { tab } from '@testing-library/user-event/dist/tab';
 import AddressManager from './AddressManager';
 import GiftManager from './GiftManager';
+import HumanManager from './HumanManager';
 
 type Props = {
 
@@ -130,6 +131,7 @@ const PageAdmin = () => {
       {tabs[1].current ? <CenterManager /> : null}
       {tabs[2].current ? <GiftManager /> : null}
       {tabs[3].current ? <AddressManager /> : null}
+      {tabs[5].current ? <HumanManager /> : null}
 
 
 
