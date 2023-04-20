@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, Fragment } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { ChevronDownIcon, EllipsisVerticalIcon, LockClosedIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, EllipsisVerticalIcon, LockClosedIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { giftUpdateAction, humanUpdateAction } from '../../core/lib/adapters';
@@ -12,8 +12,9 @@ import { CellProps, Column } from 'react-table';
 import { Table } from '../../components/Table';
 import { GiftEntityInterface } from '../../core/lib/entities/Gift';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { Popover } from '@headlessui/react';
-
+import { Popover, Dialog, Transition } from '@headlessui/react';
+import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
+import { MRT_Localization_UK } from 'material-react-table/locales/uk';
 type Props = {
 
   isLoading: boolean;
@@ -36,6 +37,10 @@ const GiftManager = () => {
   const giftIsLoading = useSelector((state: RootState) => state.gift.isLoading)
   const dispatch = useDispatch();
   const giftService = new GiftService(useAxios(), useSnackbar())
+  const [modalDelete, setModalDelete] = useState({
+    isOpen: false,
+    gift: gift,
+  })
 
   useEffect(() => {
     giftService.getGifts(dispatch, giftIsLoading)
@@ -49,6 +54,11 @@ const GiftManager = () => {
   const handleButton = (prop: any) => {
     giftService.create(dispatch, giftIsLoading, { name: gift.name, description: gift.description, period: gift.period, measurement: gift.measurement, centerId: user.centerId._id })
   };
+
+
+  const handleDeleteButton = (gift: GiftEntityInterface) => {
+    giftService.delete(dispatch, giftIsLoading, gift)
+  };
   const giftActions = useCallback((
     {
       value,
@@ -57,7 +67,6 @@ const GiftManager = () => {
       },
     }: CellProps<GiftEntityInterface>
   ) => {
-
 
     return (
       <Popover className="relative">
@@ -77,10 +86,13 @@ const GiftManager = () => {
                 <PencilSquareIcon className="block h-6 w-6 pr-1" />
                 Редагувати
               </button>
-              <button className="flex items-center py-2 px-6 text-xs font-medium text-gray-700 bg-white  toggle-full-view hover:bg-gray-100 hover:text-red-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400  dark:hover:text-white dark:hover:bg-gray-700" onClick={() => console.log({
-                isOpen: true,
-                gift: original,
-              })}>
+              <button className="flex items-center py-2 px-6 text-xs font-medium text-gray-700 bg-white  toggle-full-view hover:bg-gray-100 hover:text-red-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400  dark:hover:text-white dark:hover:bg-gray-700" onClick={() =>
+                setModalDelete({
+                  isOpen: true,
+                  gift: original,
+                }
+                )
+              }>
                 <span className="sr-only">Delete</span>
                 <TrashIcon className="block h-6 w-6 pr-1" />
                 Видалити
@@ -89,47 +101,76 @@ const GiftManager = () => {
           </div>
         </Popover.Panel>
       </Popover>
-      // <div className="flex ">
-      //   <button className="flex items-center p-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-      //     <span className="sr-only">Edit</span>
-      //     <PencilSquareIcon className="block h-6 w-6" />
-      //   </button>
-      //   <button className="flex ml-1 items-center p-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-      //     <span className="sr-only">Delete</span>
-      //     <TrashIcon className="block h-6 w-6" />
-      //   </button>
-      // </div>
+
     );
   }, [
     // userCanDeleteDealer, userCanUpdateDealer
   ]);
 
-  const columnsGiftMachines: Column<GiftEntityInterface>[] = useMemo(
+
+
+
+  // const columnsGiftMachines: Column<GiftEntityInterface>[] = useMemo(
+  //   () => [
+  //     {
+  //       Header: 'id',
+  //       accessor: '_id',
+  //       width: 10,
+  //       disableSortBy: true,
+  //       disableFilters: true
+  //     },
+  //     {
+  //       Header: 'Назва',
+  //       accessor: 'name'
+  //     },
+  //     {
+  //       Header: 'Опис',
+  //       accessor: 'description'
+  //     },
+  //     {
+  //       Header: 'Одиницю вимиру',
+  //       accessor: gift => gift.measurement
+  //     },
+  //     {
+  //       Header: 'Період',
+  //       accessor: gift => gift.period
+  //     },
+  //     {
+  //       id: 'giftActions',
+  //       Header: '',
+  //       accessor: '_id',
+  //       width: 46,
+  //       Cell: giftActions,
+  //     },
+  //   ],
+  //   [giftActions]
+  // );
+
+  const columnsGiftMachines: MRT_ColumnDef<GiftEntityInterface>[] = useMemo(
     () => [
       {
-        Header: 'id',
-        accessor: '_id',
-        width: 10,
+        header: 'id',
+        accessorKey: '_id',
+        enableSorting: false,
+        enableColumnFilter: false
       },
       {
-        Header: 'Назва',
-        accessor: 'name'
+        header: 'Назва',
+        accessorKey: 'name'
       },
       {
-        Header: 'Опис',
-        accessor: 'description'
+        header: 'Опис',
+        accessorKey: 'description'
       },
       {
-        Header: 'Одиницю вимиру',
-        accessor: gift => gift.measurement
+        header: 'Одиницю вимиру',
+        accessorFn: gift => gift.measurement
       },
       {
-        id: 'giftActions',
-        Header: '',
-        accessor: '_id',
-        width: 46,
-        Cell: giftActions,
+        header: 'Період',
+        accessorFn: gift => gift.period
       },
+
     ],
     [giftActions]
   );
@@ -196,11 +237,6 @@ const GiftManager = () => {
                 onChange={handleChange("period")}
               />
             </div>
-
-
-
-
-
           </div>
           <div className=" px-4 py-3 text-center sm:px-6">
             <button
@@ -212,20 +248,159 @@ const GiftManager = () => {
             </button>
           </div>
           <div className=" px-4 py-3 text-center sm:px-6">
-            <Table
+            {/* <Table
               isLoading={giftIsLoading}
               columns={columnsGiftMachines}
               data={gifts}
               msgNoData="На даний момент не було створено жодного виду допомоги!"
-            />
+            /> */}
+            <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+              <MaterialReactTable
+                columns={columnsGiftMachines}
+                data={gifts}
+                state={{ isLoading: giftIsLoading }}
+                enableRowSelection
+                // enableColumnResizing
+                // columnResizeMode="onEnd"
+                initialState={{ density: "compact" }}
+                localization={MRT_Localization_UK}
+                enableRowActions
+                renderRowActions={({ row, table }) => (
+                  <div className='flex'>
+                    <button className="flex items-center py-1 px-1 text-xs font-medium text-gray-700 toggle-full-view  hover:text-blue-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" onClick={() => console.log({
+                      isOpen: true,
+                      gift: row.original,
+                    })}>
+                      <span className="sr-only">Edit</span>
+                      <PencilSquareIcon className="block h-6 w-6 pr-1" />
+
+                    </button>
+                    <button className="flex items-center py-1 px-1 text-xs font-medium text-gray-700   toggle-full-view hover:text-red-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400  dark:hover:text-white dark:hover:bg-gray-700" onClick={() =>
+                      setModalDelete({
+                        isOpen: true,
+                        gift: row.original,
+                      }
+                      )
+                    }>
+                      <span className="sr-only">Delete</span>
+                      <TrashIcon className="block h-6 w-6 pr-1" />
+
+                    </button>
+                  </div>
+                )}
+
+              />
+            </div>
+
+
           </div>
 
 
         </div>
 
-      </div>
+      </div >
+
+      <Transition appear show={modalDelete.isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-[9999] overflow-y-auto bg-opacity-50 bg-gray-900"
+
+          onClose={() => setModalDelete(prevState => {
+            return {
+              ...prevState,
+              isOpen: false
+            }
+          })}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  <div className='flex'>
+                    <TrashIcon className="h-6 w-6 pr-1" />
+                    Видалення
+                  </div>
+                </Dialog.Title>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500 border-t pt-2">
+                    Ви впевнені, що хочете видалити запис?
+
+                  </p>
+                  <p className="text-sm text-gray-500 pt-2">
+                    Назва: {modalDelete.gift.name}
+                  </p>
+                  <p className="text-sm text-gray-500 pt-2">
+                    Опис: {modalDelete.gift.description}
+                  </p>
 
 
+                </div>
+
+                <div className="mt-4 flex justify-between">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-300 duration-300"
+                    onClick={() => {
+
+                      handleDeleteButton(modalDelete.gift)
+                      setModalDelete(prevState => {
+                        return {
+                          ...prevState,
+                          isOpen: false
+                        }
+                      })
+                    }}
+                  >
+                    <TrashIcon className="h-5 w-5 pr-1" />
+                    Видалити
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm text-black bg-gray-200 border border-transparent rounded-md hover:bg-gray-300 duration-300"
+                    onClick={() => setModalDelete(prevState => {
+                      return {
+                        ...prevState,
+                        isOpen: false
+                      }
+                    })}
+                  >
+                    <XMarkIcon className="h-5 w-5 pr-1" />
+                    Скасувати
+                  </button>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
 
     </>
 

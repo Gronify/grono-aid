@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -30,5 +38,14 @@ export class GiftController {
   @Get()
   findByCenterId(@GetUser() user: User) {
     return this.giftService.findByCenterId({ centerId: user.centerId._id });
+  }
+
+  @ApiOperation({ summary: 'Delete Gift' })
+  @ApiResponse({ status: 200, type: Gift })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Delete()
+  deleteById(@Body() giftDto: { _id: string }) {
+    return this.giftService.deleteById(giftDto._id);
   }
 }

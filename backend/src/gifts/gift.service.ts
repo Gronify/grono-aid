@@ -23,4 +23,9 @@ export class GiftService {
     const gifts = await this.giftModel.find({ centerId: dto.centerId });
     return gifts;
   }
+
+  async deleteById(_id: string): Promise<Boolean> {
+    const gift = await this.giftModel.deleteOne({ _id: _id });
+    return true;
+  }
 }
