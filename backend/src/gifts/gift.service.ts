@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Gift, GiftDocument } from './schemas/gift.schema';
 import { CreateGiftDto } from './dto/create-gift.dto';
 import { CenterService } from 'src/center/center.service';
+import { EditGiftDto } from './dto/edit-gift.dto';
 
 @Injectable()
 export class GiftService {
@@ -27,5 +28,13 @@ export class GiftService {
   async deleteById(_id: string): Promise<Boolean> {
     const gift = await this.giftModel.deleteOne({ _id: _id });
     return true;
+  }
+
+  async edit(dto: EditGiftDto): Promise<Gift> {
+    const gift = await this.giftModel.findOneAndUpdate(
+      { _id: dto._id },
+      { ...dto },
+    );
+    return gift;
   }
 }

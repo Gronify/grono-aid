@@ -26,7 +26,7 @@ function App() {
   }
   const navigate = useNavigate();
   useEffect(() => {
-    navigate("/")
+    // navigate("/")
     return () => {
 
     }

@@ -105,6 +105,10 @@ const Table = <T extends object>({ columns, data, msgNoData, isLoading }: Props<
           })}
         </tbody>
       </table>
+
+
+
+
     </div>
   );
 }

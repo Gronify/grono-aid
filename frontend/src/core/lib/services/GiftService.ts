@@ -89,6 +89,45 @@ export default class GiftService implements GiftInterface {
       });
   }
 
+  async edit(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    gift: GiftInterface
+  ): Promise<Boolean> {
+    dispatch(giftIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .patch<Boolean, { data: DtoGiftResponse }>("/gift", {
+        ...gift,
+      })
+      .then((response) => {
+        dispatch(
+          giftUpdateAction({
+            _id: "",
+            name: "",
+            description: "",
+            period: 0,
+            measurement: "",
+            centerId: "",
+          })
+        );
+        this.getGifts(dispatch, isLoading);
+        this._enqueueSnackbar("Вид допомоги відредаговано!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(giftIsLoadingAction({ isLoading: false }));
+      });
+  }
+
   async delete(
     dispatch: Dispatch<AnyAction>,
     isLoading: boolean,

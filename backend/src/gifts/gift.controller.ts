@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -16,6 +17,7 @@ import { Gift } from './schemas/gift.schema';
 import { GiftService } from './gift.service';
 import { GetUser } from 'src/user/user.decorator';
 import { User } from 'src/user/schemas/user.schema';
+import { EditGiftDto } from './dto/edit-gift.dto';
 
 @ApiTags('Gifts')
 @Controller('gift')
@@ -38,6 +40,15 @@ export class GiftController {
   @Get()
   findByCenterId(@GetUser() user: User) {
     return this.giftService.findByCenterId({ centerId: user.centerId._id });
+  }
+
+  @ApiOperation({ summary: 'Create Center' })
+  @ApiResponse({ status: 200, type: Gift })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Patch()
+  edit(@Body() giftDto: EditGiftDto) {
+    return this.giftService.edit({ ...giftDto });
   }
 
   @ApiOperation({ summary: 'Delete Gift' })
