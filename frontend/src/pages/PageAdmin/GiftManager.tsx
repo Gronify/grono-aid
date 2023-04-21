@@ -15,9 +15,7 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Popover, Dialog, Transition } from '@headlessui/react';
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { MRT_Localization_UK } from 'material-react-table/locales/uk';
-import { MRT_Cell } from 'material-react-table';
-import { MRT_Row } from 'material-react-table';
-import { MRT_TableInstance } from 'material-react-table';
+
 type Props = {
 
   isLoading: boolean;
@@ -109,7 +107,7 @@ const GiftManager = () => {
     );
   }
 
-  const columnsGiftMachines: MRT_ColumnDef<GiftEntityInterface>[] = useMemo(
+  const columnsGift: MRT_ColumnDef<GiftEntityInterface>[] = useMemo(
     () => [
       // {
       //   header: 'id',
@@ -213,7 +211,7 @@ const GiftManager = () => {
           <div className=" px-4 py-3 text-center sm:px-6">
             <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
               <MaterialReactTable
-                columns={columnsGiftMachines}
+                columns={columnsGift}
                 data={gifts}
                 state={{ isLoading: giftIsLoading }}
                 enableRowSelection

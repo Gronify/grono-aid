@@ -133,4 +133,50 @@ export class HumanService {
     const newHuman = await human.update(dto);
     return newHuman;
   }
+
+  async deleteById(_id: string): Promise<Boolean> {
+    const human = await this.humanModel.deleteOne({ _id: _id });
+    return true;
+  }
+
+  async getAll(): Promise<Human[]> {
+    const humans = await this.humanModel
+      .find()
+      .populate({
+        path: 'address',
+        model: 'Flat',
+        populate: {
+          path: 'buildingId',
+          model: 'Building',
+          populate: {
+            path: 'streetId',
+            model: 'Street',
+            populate: {
+              path: 'cityId',
+              model: 'City',
+              populate: { path: 'regionId', model: 'Region' },
+            },
+          },
+        },
+      })
+      .populate({
+        path: 'actualAddress',
+        model: 'Flat',
+        populate: {
+          path: 'buildingId',
+          model: 'Building',
+          populate: {
+            path: 'streetId',
+            model: 'Street',
+            populate: {
+              path: 'cityId',
+              model: 'City',
+              populate: { path: 'regionId', model: 'Region' },
+            },
+          },
+        },
+      });
+
+    return humans;
+  }
 }

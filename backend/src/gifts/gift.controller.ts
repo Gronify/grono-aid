@@ -42,7 +42,7 @@ export class GiftController {
     return this.giftService.findByCenterId({ centerId: user.centerId._id });
   }
 
-  @ApiOperation({ summary: 'Create Center' })
+  @ApiOperation({ summary: 'Edit Gift' })
   @ApiResponse({ status: 200, type: Gift })
   @Roles('ADMIN')
   @UseGuards(RolesGuard)

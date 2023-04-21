@@ -9,7 +9,11 @@ import { RootState } from "../frameworks/redux";
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { UserEntityInterface } from "../entities/User";
-import { centerIsLoadingAction, centersUpdateAction } from "../adapters";
+import {
+  centerIsLoadingAction,
+  centerUpdateAction,
+  centersUpdateAction,
+} from "../adapters";
 import { DtoCenterResponse, DtoCreateCenter } from "../dto/center";
 import {
   OptionsObject,
@@ -72,6 +76,86 @@ export default class CenterService implements CenterInterface {
       .then((response) => {
         this.getCenters(dispatch, isLoading);
         this._enqueueSnackbar("Центр створенно!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(centerIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async edit(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    center: CenterInterface
+  ): Promise<Boolean> {
+    dispatch(centerIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .patch<Boolean, { data: DtoCenterResponse }>("/center", {
+        ...center,
+      })
+      .then((response) => {
+        dispatch(
+          centerUpdateAction({
+            _id: "",
+            name: "",
+            address: "",
+            phone: "",
+            director: "",
+            phoneDirector: "",
+          })
+        );
+        this.getCenters(dispatch, isLoading);
+        this._enqueueSnackbar("Центр відредаговано!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(centerIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async delete(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    center: CenterInterface
+  ): Promise<Boolean> {
+    dispatch(centerIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .delete<Boolean, { data: DtoCenterResponse }>("/center", {
+        data: {
+          ...center,
+        },
+      })
+      .then((response) => {
+        dispatch(
+          centerUpdateAction({
+            _id: "",
+            name: "",
+            address: "",
+            phone: "",
+            director: "",
+            phoneDirector: "",
+          })
+        );
+        this.getCenters(dispatch, isLoading);
+        this._enqueueSnackbar("Центр видаленно!", {
           variant: "success",
         });
         return response.data;

@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Center, CenterDocument } from './schemas/center.schema';
 import { CreateCenterDto } from './dto/create-center.dto';
+import { EditCenterDto } from './dto/edit-center.dto';
 
 @Injectable()
 export class CenterService {
@@ -26,5 +27,18 @@ export class CenterService {
     const center = await this.centerModel.findById(centerId);
 
     return center;
+  }
+
+  async edit(dto: EditCenterDto): Promise<Center> {
+    const center = await this.centerModel.findOneAndUpdate(
+      { _id: dto._id },
+      { ...dto },
+    );
+    return center;
+  }
+
+  async deleteById(_id: string): Promise<Boolean> {
+    const center = await this.centerModel.deleteOne({ _id: _id });
+    return true;
   }
 }

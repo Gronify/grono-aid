@@ -2,13 +2,21 @@ import { AxiosInstance } from "axios";
 
 import { Dispatch } from "react";
 import { AnyAction, Observable } from "@reduxjs/toolkit";
-import { humanIsLoadingAction, humanSearchIsLoadingAction } from "../adapters";
+import {
+  humanIsLoadingAction,
+  humanSearchIsLoadingAction,
+  humanUpdateAction,
+} from "../adapters";
 
 import {
   humansSearchUpdateAction,
   humanSearchUpdateAction,
 } from "../adapters/redux/slices/humanSearch";
-import { DtoCreateHuman, DtoHumanSearchResponse } from "../dto/human";
+import {
+  DtoCreateHuman,
+  DtoEditHuman,
+  DtoHumanSearchResponse,
+} from "../dto/human";
 import { HumanEntityInterface } from "../entities/Human";
 import {
   OptionsObject,
@@ -16,6 +24,7 @@ import {
   SnackbarKey,
   SnackbarMessage,
 } from "notistack";
+import { HumanSearchEntityInterface } from "../entities/Human";
 
 export interface HumanInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -100,6 +109,183 @@ export default class HumanService implements HumanInterface {
       .catch((error: any) => {
         return error;
         // onShowErrorToast(error);
+      })
+      .finally(() => {
+        dispatch(humanSearchIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getHumans(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
+    dispatch(humanSearchIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .get<DtoHumanSearchResponse[]>("/human/all")
+      .then((response) => {
+        dispatch(humansSearchUpdateAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+      })
+      .finally(() => {
+        dispatch(humanSearchIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async edit(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    human: HumanSearchEntityInterface
+  ): Promise<Boolean> {
+    dispatch(humanIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .patch<Boolean, { data: DtoEditHuman }>("/human", {
+        ...human,
+      })
+      .then((response) => {
+        dispatch(
+          humanSearchUpdateAction({
+            _id: "",
+            surname: "",
+            name: "",
+            patronymic: "",
+            ipn: "",
+            dateOfBirthday: "",
+            passportId: "",
+            comment: "",
+            phone: "",
+            address: {
+              _id: "",
+              name: "",
+              buildingId: {
+                _id: "",
+                name: "",
+                streetId: {
+                  _id: "",
+                  name: "",
+                  cityId: {
+                    _id: "",
+                    name: "",
+                    regionId: { _id: "", name: "" },
+                  },
+                },
+              },
+            },
+            actualAddress: {
+              _id: "",
+              name: "",
+              buildingId: {
+                _id: "",
+                name: "",
+                streetId: {
+                  _id: "",
+                  name: "",
+                  cityId: {
+                    _id: "",
+                    name: "",
+                    regionId: { _id: "", name: "" },
+                  },
+                },
+              },
+            },
+            blocked: false,
+            createdAt: "",
+            updatedAt: "",
+          })
+        );
+        this.getHumans(dispatch, isLoading);
+        this._enqueueSnackbar("Центр відредаговано!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(humanSearchIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async delete(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    human: HumanSearchEntityInterface
+  ): Promise<Boolean> {
+    dispatch(humanSearchIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .delete<Boolean, { data: HumanSearchEntityInterface }>("/human", {
+        data: {
+          ...human,
+        },
+      })
+      .then((response) => {
+        dispatch(
+          humanSearchUpdateAction({
+            _id: "",
+            surname: "",
+            name: "",
+            patronymic: "",
+            ipn: "",
+            dateOfBirthday: "",
+            passportId: "",
+            comment: "",
+            phone: "",
+            address: {
+              _id: "",
+              name: "",
+              buildingId: {
+                _id: "",
+                name: "",
+                streetId: {
+                  _id: "",
+                  name: "",
+                  cityId: {
+                    _id: "",
+                    name: "",
+                    regionId: { _id: "", name: "" },
+                  },
+                },
+              },
+            },
+            actualAddress: {
+              _id: "",
+              name: "",
+              buildingId: {
+                _id: "",
+                name: "",
+                streetId: {
+                  _id: "",
+                  name: "",
+                  cityId: {
+                    _id: "",
+                    name: "",
+                    regionId: { _id: "", name: "" },
+                  },
+                },
+              },
+            },
+            blocked: false,
+            createdAt: "",
+            updatedAt: "",
+          })
+        );
+        this.getHumans(dispatch, isLoading);
+        this._enqueueSnackbar("Центр видаленно!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
       })
       .finally(() => {
         dispatch(humanSearchIsLoadingAction({ isLoading: false }));

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -7,6 +15,7 @@ import { HumanService } from './human.service';
 import { Human } from './schemas/human.schema';
 import { Query } from '@nestjs/common/decorators';
 import { SearchHumanDto } from './dto/search-human.dto';
+import { UpdateHumanDto } from './dto/update-human.dto';
 
 @ApiTags('Human')
 @Controller('human')
@@ -38,5 +47,32 @@ export class HumanController {
   @Get('search')
   findHumanByIpn(@Query() query: SearchHumanDto) {
     return this.humanService.findHumans(query);
+  }
+
+  @ApiOperation({ summary: 'Get All Humans' })
+  @ApiResponse({ status: 200, type: Human })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('all')
+  getAll() {
+    return this.humanService.getAll();
+  }
+
+  @ApiOperation({ summary: 'Edit Human' })
+  @ApiResponse({ status: 200, type: Human })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Patch()
+  edit(@Body() humanDto: UpdateHumanDto) {
+    return this.humanService.edit({ ...humanDto });
+  }
+
+  @ApiOperation({ summary: 'Delete Human' })
+  @ApiResponse({ status: 200, type: Human })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Delete()
+  deleteById(@Body() humanDto: { _id: string }) {
+    return this.humanService.deleteById(humanDto._id);
   }
 }

@@ -55,3 +55,17 @@ export type DtoCreateHuman = {
   comment: string;
   blocked: boolean;
 };
+
+export type DtoEditHuman = {
+  surname: string;
+  name: string;
+  patronymic: string;
+  phone: string;
+  ipn: string;
+  dateOfBirthday: Date;
+  address: string;
+  actualAddress: string;
+  passportId: string;
+  comment: string;
+  blocked: boolean;
+};
