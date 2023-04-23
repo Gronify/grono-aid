@@ -10,7 +10,47 @@ interface DistributionState {
 const initialState: DistributionState = {
   data: {
     _id: "",
-    humanId: "",
+    humanId: {
+      _id: "",
+      surname: "",
+      name: "",
+      patronymic: "",
+      phone: "",
+      ipn: "",
+      dateOfBirthday: "",
+
+      address: {
+        _id: "",
+        name: "",
+        buildingId: {
+          _id: "",
+          name: "",
+          streetId: {
+            _id: "",
+            name: "",
+            cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
+          },
+        },
+      },
+      actualAddress: {
+        _id: "",
+        name: "",
+        buildingId: {
+          _id: "",
+          name: "",
+          streetId: {
+            _id: "",
+            name: "",
+            cityId: { _id: "", name: "", regionId: { _id: "", name: "" } },
+          },
+        },
+      },
+      passportId: "",
+      comment: "",
+      blocked: false,
+      createdAt: "",
+      updatedAt: "",
+    },
     giftId: {
       _id: "",
       name: "",
@@ -21,7 +61,30 @@ const initialState: DistributionState = {
     },
     amount: 0,
     comment: "",
-    userId: "",
+    userId: {
+      _id: "",
+      surname: "",
+      name: "",
+      patronymic: "",
+      phone: "",
+      email: "",
+      isBlocked: false,
+      centerId: {
+        _id: "",
+        name: "",
+        address: "",
+        phone: "",
+        director: "",
+        phoneDirector: "",
+      },
+      roles: [
+        {
+          _id: "",
+          value: "",
+          description: "",
+        },
+      ],
+    },
     createdAt: "",
   },
   distributions: [],

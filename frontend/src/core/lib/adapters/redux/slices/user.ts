@@ -10,6 +10,7 @@ import { RoleEntityInterface } from "../../../entities/Role";
 
 interface UserState {
   data: UserEntityInterface;
+  users: UserEntityInterface[];
   isLoggedIn: boolean;
   isLoading: boolean;
 }
@@ -33,6 +34,7 @@ const initialState: UserState = {
     },
     roles: [],
   },
+  users: [],
   isLoggedIn: new LocalStorageToken().hasAccessToken(),
   isLoading: false,
 };
@@ -89,6 +91,18 @@ export const userSlice = createSlice({
         },
       };
     },
+
+    usersUpdateAction: (
+      state,
+      action: PayloadAction<UserEntityInterface[]>
+    ) => {
+      const users = action.payload;
+
+      return {
+        ...state,
+        users: users,
+      };
+    },
   },
 });
 
@@ -97,6 +111,7 @@ export const {
   userUpdateAction,
   userSingOutAction,
   userIsLoadingAction,
+  usersUpdateAction,
 } = userSlice.actions;
 
 export default userSlice.reducer;

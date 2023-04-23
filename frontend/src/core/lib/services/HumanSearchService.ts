@@ -195,7 +195,7 @@ export default class HumanService implements HumanInterface {
           })
         );
         this.getHumans(dispatch, isLoading);
-        this._enqueueSnackbar("Центр відредаговано!", {
+        this._enqueueSnackbar("Людину відредаговано!", {
           variant: "success",
         });
         return response.data;
@@ -276,7 +276,7 @@ export default class HumanService implements HumanInterface {
           })
         );
         this.getHumans(dispatch, isLoading);
-        this._enqueueSnackbar("Центр видаленно!", {
+        this._enqueueSnackbar("Людину видаленно!", {
           variant: "success",
         });
         return response.data;

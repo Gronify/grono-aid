@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -32,7 +40,25 @@ export class DistributionController {
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
   @Get()
-  findByCenterId(@Query() query: { humanId: string }) {
+  findByHumanId(@Query() query: { humanId: string }) {
     return this.distributionService.findAllByHumanId(query.humanId);
+  }
+
+  @ApiOperation({ summary: 'Get Distributions by Center' })
+  @ApiResponse({ status: 200, type: Distribution })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('center')
+  findAllByCenterId(@Query() query: { centerId: string }) {
+    return this.distributionService.findAllByCenterId(query.centerId);
+  }
+
+  @ApiOperation({ summary: 'Delete Distribution' })
+  @ApiResponse({ status: 200, type: Distribution })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Delete()
+  deleteById(@Body() distributionDto: { _id: string }) {
+    return this.distributionService.deleteById(distributionDto._id);
   }
 }

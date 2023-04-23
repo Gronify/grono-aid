@@ -9,6 +9,7 @@ import { useAxios } from '../../hooks';
 import DistributionService from '../../core/lib/services/DistributionService';
 import UserService from '../../core/lib/services/UserService';
 import Avatar, { genConfig } from 'react-nice-avatar';
+import { useSnackbar } from 'notistack';
 
 type Props = {
 
@@ -27,7 +28,7 @@ const PageProfile = () => {
   const userShortStat = useSelector((state: RootState) => state.userShortStat.data);
 
 
-  const userService = new UserService(useAxios())
+  const userService = new UserService(useAxios(), useSnackbar())
 
 
   useEffect(() => {

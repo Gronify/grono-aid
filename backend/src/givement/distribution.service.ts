@@ -38,7 +38,6 @@ export class DistributionService {
     const distributions = await this.distributionModel.find({
       giftId: giftId,
     });
-
     return distributions;
   }
 
@@ -100,5 +99,32 @@ export class DistributionService {
     ]);
 
     return distributions;
+  }
+
+  async findAllByCenterId(centerId: string): Promise<Distribution[]> {
+    const distributions = await this.distributionModel
+      .find({
+        centerId: centerId,
+      })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: 'giftId',
+        model: 'Gift',
+      })
+      .populate({
+        path: 'humanId',
+        model: 'Human',
+      })
+      .populate({
+        path: 'userId',
+        model: 'User',
+      });
+
+    return distributions;
+  }
+
+  async deleteById(_id: string): Promise<Boolean> {
+    const distribution = await this.distributionModel.deleteOne({ _id: _id });
+    return true;
   }
 }

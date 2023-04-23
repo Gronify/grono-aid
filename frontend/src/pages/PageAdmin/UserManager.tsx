@@ -16,13 +16,15 @@ import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { MRT_Localization_UK } from 'material-react-table/locales/uk';
 import { Dialog, Transition } from '@headlessui/react';
 import moment from 'moment';
+import UserService from '../../core/lib/services/UserService';
+import { UserEntityInterface } from '../../core/lib/entities/User';
 
 type Props = {
 
   isLoading: boolean;
 }
 
-const HumanSchema = Yup.object().shape({
+const UserSchema = Yup.object().shape({
   login: Yup.string()
     .required("Логін це обов'язкове поле вводу"),
   password: Yup.string()
@@ -35,48 +37,86 @@ const HumanSchema = Yup.object().shape({
 // director: string;
 // phoneDirector: string;
 
-const HumanManager = () => {
+const UserManager = () => {
 
   const dispatch = useDispatch();
-  const human = useSelector((state: RootState) => state.humanSearch.data);
-  const humans = useSelector((state: RootState) => state.humanSearch.humans);
-  const humanIsLoading = useSelector((state: RootState) => state.humanSearch.isLoading);
+  const users = useSelector((state: RootState) => state.user.users);
+  const userIsLoading = useSelector((state: RootState) => state.user.isLoading);
 
   const [modalDelete, setModalDelete] = useState({
     isOpen: false,
-    human: human,
+    user: {
+      _id: "",
+      surname: "",
+      name: "",
+      patronymic: "",
+      phone: "",
+      email: "",
+      isBlocked: false,
+      centerId: {
+        _id: "",
+        name: "",
+        address: "",
+        phone: "",
+        director: "",
+        phoneDirector: "",
+      },
+      roles: [{
+        _id: "",
+        value: "",
+        description: "",
+      }],
+    },
   })
   const [modalEdit, setModalEdit] = useState({
     isOpen: false,
-    human: human,
+    user: {
+      _id: "",
+      surname: "",
+      name: "",
+      patronymic: "",
+      phone: "",
+      email: "",
+      isBlocked: false,
+      centerId: {
+        _id: "",
+        name: "",
+        address: "",
+        phone: "",
+        director: "",
+        phoneDirector: "",
+      },
+      roles: [{
+        _id: "",
+        value: "",
+        description: "",
+      }],
+    },
   })
 
-  const humanService = new HumanService(useAxios(), useSnackbar())
+  const userService = new UserService(useAxios(), useSnackbar())
   useEffect(() => {
-    humanService.getHumans(dispatch, humanIsLoading)
+    userService.getUsers(dispatch, userIsLoading)
 
   }, [])
 
-  const handleChange = (prop: any) => (event: any) => {
-    dispatch(humanSearchUpdateAction({ ...human, [prop]: event.target.value }))
-  };
+
 
   const handleEditChange = (prop: any) => (event: any) => {
-    setModalEdit({ isOpen: modalEdit.isOpen, human: { ...modalEdit.human, [prop]: event.target.value } })
+    setModalEdit({ isOpen: modalEdit.isOpen, user: { ...modalEdit.user, [prop]: event.target.value } })
   };
-  const handleDeleteButton = (human: HumanSearchEntityInterface) => {
-    humanService.delete(dispatch, humanIsLoading, human)
-  };
-
-  const handleEditButton = (human: HumanSearchEntityInterface) => {
-    console.log(human);
-
-    humanService.edit(dispatch, humanIsLoading, { ...human, dateOfBirthday: String(moment(human.dateOfBirthday, 'DD.MM.YYYY').toDate()) })
+  const handleDeleteButton = (user: UserEntityInterface) => {
+    userService.delete(dispatch, userIsLoading, user)
   };
 
-  const humanActions = (props: {
+  const handleEditButton = (user: UserEntityInterface) => {
+
+    userService.edit(dispatch, userIsLoading, { ...user })
+  };
+
+  const userActions = (props: {
     row: {
-      original: HumanSearchEntityInterface
+      original: UserEntityInterface
     },
     table: any,
   }): ReactNode => {
@@ -84,7 +124,7 @@ const HumanManager = () => {
       <div className='flex'>
         <button className="flex items-center py-1 px-1 text-xs font-medium text-gray-700 toggle-full-view  hover:text-blue-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" onClick={() => setModalEdit({
           isOpen: true,
-          human: { ...props.row.original, dateOfBirthday: moment(props.row.original.dateOfBirthday).format('DD.MM.YYYY') },
+          user: { ...props.row.original },
         })}>
           <span className="sr-only">Edit</span>
           <PencilSquareIcon className="block h-6 w-6 pr-1" />
@@ -93,7 +133,7 @@ const HumanManager = () => {
         <button className="flex items-center py-1 px-1 text-xs font-medium text-gray-700   toggle-full-view hover:text-red-700 focus:z-10 dark:bg-gray-800 focus:outline-none dark:text-gray-400  dark:hover:text-white dark:hover:bg-gray-700" onClick={() =>
           setModalDelete({
             isOpen: true,
-            human: props.row.original,
+            user: props.row.original,
           }
           )
         }>
@@ -105,8 +145,12 @@ const HumanManager = () => {
     );
   }
 
-  const columnsHuman: MRT_ColumnDef<HumanSearchEntityInterface>[] = useMemo(
+  const columnsUser: MRT_ColumnDef<UserEntityInterface>[] = useMemo(
     () => [
+      {
+        header: 'Центр',
+        accessorFn: user => user.centerId.name
+      },
       {
         header: 'Прізвище',
         accessorKey: 'surname'
@@ -120,32 +164,16 @@ const HumanManager = () => {
         accessorKey: 'patronymic'
       },
       {
-        header: 'ІПН',
-        accessorKey: 'ipn'
-      },
-      {
-        header: 'Паспорт',
-        accessorFn: human => human.passportId || " - "
-      },
-      {
         header: 'Телефон',
         accessorKey: 'phone'
       },
       {
-        header: 'Дата народження',
-        accessorFn: human => moment(human.dateOfBirthday).format('DD.MM.YYYY')
-      },
-      {
-        header: 'Адреса',
-        accessorFn: human => `${human.actualAddress.buildingId.streetId.cityId.regionId.name}, ${human.actualAddress.buildingId.streetId.cityId.name}, ${human.actualAddress.buildingId.streetId.name}, ${human.actualAddress.buildingId.name}, ${human.actualAddress.name}`
-      },
-      {
-        header: 'Коммент',
-        accessorKey: 'comment'
+        header: 'Email',
+        accessorKey: 'email'
       },
 
     ],
-    [humanActions]
+    [userActions]
   );
 
 
@@ -157,16 +185,16 @@ const HumanManager = () => {
           <div className=" px-4 py-3 text-center sm:px-6">
             <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
               <MaterialReactTable
-                columns={columnsHuman}
-                data={humans}
-                state={{ isLoading: humanIsLoading }}
+                columns={columnsUser}
+                data={users}
+                state={{ isLoading: userIsLoading }}
                 enableRowSelection
                 // enableColumnResizing
                 // columnResizeMode="onEnd"
                 initialState={{ density: "compact" }}
                 localization={MRT_Localization_UK}
                 enableRowActions
-                renderRowActions={humanActions}
+                renderRowActions={userActions}
               />
             </div>
           </div>
@@ -229,7 +257,7 @@ const HumanManager = () => {
 
                   </p>
                   <p className="text-s text-gray-500 pt-2">
-                    ПІБ: {modalDelete.human.surname} {modalDelete.human.name} {modalDelete.human.patronymic}
+                    ПІБ: {modalDelete.user.surname} {modalDelete.user.name} {modalDelete.user.patronymic}
                   </p>
 
 
@@ -242,7 +270,7 @@ const HumanManager = () => {
                     className="inline-flex justify-center px-4 py-2 text-sm text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-300 duration-300"
                     onClick={() => {
 
-                      handleDeleteButton(modalDelete.human)
+                      handleDeleteButton(modalDelete.user)
                       setModalDelete(prevState => {
                         return {
                           ...prevState,
@@ -333,7 +361,7 @@ const HumanManager = () => {
                       name="surname"
                       id="surname"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      value={modalEdit.human.surname}
+                      value={modalEdit.user.surname}
                       onChange={handleEditChange("surname")}
                     />
                   </div>
@@ -347,12 +375,10 @@ const HumanManager = () => {
                       name="name"
                       id="name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      value={modalEdit.human.name}
+                      value={modalEdit.user.name}
                       onChange={handleEditChange("name")}
                     />
                   </div>
-
-
 
                   <div className="col-span-6 sm:col-span-6 lg:col-span-3">
                     <label htmlFor="patronymic" className="block text-sm font-medium text-gray-700">
@@ -363,12 +389,10 @@ const HumanManager = () => {
                       name="patronymic"
                       id="patronymic"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      value={modalEdit.human.patronymic}
+                      value={modalEdit.user.patronymic}
                       onChange={handleEditChange("patronymic")}
                     />
                   </div>
-
-
 
                   <div className="col-span-6 sm:col-span-6 lg:col-span-3">
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
@@ -376,7 +400,7 @@ const HumanManager = () => {
                     </label>
                     <InputMask
                       mask='+389999999999'
-                      value={modalEdit.human.phone}
+                      value={modalEdit.user.phone}
                       maskPlaceholder=""
                       onChange={handleEditChange("phone")}
                     >
@@ -389,51 +413,6 @@ const HumanManager = () => {
                     </InputMask>
                   </div>
 
-                  <div className="col-span-6 sm:col-span-6 lg:col-span-3">
-                    <label htmlFor="ipn" className="block text-sm font-medium text-gray-700">
-                      ІПН
-                    </label>
-                    <InputMask
-                      mask='9999999999'
-                      value={modalEdit.human.ipn}
-                      maskPlaceholder=""
-
-                      onChange={handleEditChange("ipn")}
-                    >
-                      <input
-                        type="text"
-                        name="ipn"
-                        id="ipn"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-
-                      />
-                    </InputMask>
-                  </div>
-
-                  <div className="col-span-6 sm:col-span-6 lg:col-span-3">
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                      Дата народження
-                    </label>
-                    <InputMask
-                      mask='99.99.9999'
-                      value={modalEdit.human.dateOfBirthday}
-                      placeholder="31.08.1997"
-                      maskPlaceholder=""
-                      onChange={handleEditChange("dateOfBirthday")}
-                    >
-                      <input type="text"
-                        name="dateOfBirthday"
-                        id="dateOfBirthday"
-
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </InputMask>
-
-                  </div>
-
-
-
-
                 </div>
 
                 <div className="mt-4 flex justify-between">
@@ -442,7 +421,7 @@ const HumanManager = () => {
                     className="inline-flex justify-center px-4 py-2 text-sm text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-300 duration-300"
                     onClick={() => {
 
-                      handleEditButton(modalEdit.human)
+                      handleEditButton(modalEdit.user)
                       setModalEdit(prevState => {
                         return {
                           ...prevState,
@@ -481,6 +460,6 @@ const HumanManager = () => {
   )
 };
 
-export default HumanManager;
+export default UserManager;
 
 

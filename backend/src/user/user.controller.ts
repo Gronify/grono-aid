@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
@@ -8,6 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 
 import { UserService } from './user.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -24,7 +34,7 @@ export class UserController {
   @ApiResponse({ status: 200, type: [User] })
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  @Get()
+  @Get('/all')
   getAll() {
     return this.userService.getAll();
   }
@@ -53,5 +63,23 @@ export class UserController {
   @Get('/shortStat')
   getShortStatByUserId(@Query() query: { _id: string }) {
     return this.userService.getShortStatByUserId(query._id);
+  }
+
+  @ApiOperation({ summary: 'Edit User' })
+  @ApiResponse({ status: 200, type: User })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Patch()
+  edit(@Body() userDto: UpdateUserDto) {
+    return this.userService.edit({ ...userDto });
+  }
+
+  @ApiOperation({ summary: 'Delete User' })
+  @ApiResponse({ status: 200, type: User })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Delete()
+  deleteById(@Body() userDto: { _id: string }) {
+    return this.userService.deleteById(userDto._id);
   }
 }

@@ -15,6 +15,8 @@ import { tab } from '@testing-library/user-event/dist/tab';
 import AddressManager from './AddressManager';
 import GiftManager from './GiftManager';
 import HumanManager from './HumanManager';
+import UserManager from './UserManager';
+import DistributionManager from './DistributionManager';
 
 type Props = {
 
@@ -32,13 +34,13 @@ const ІssuanceSchema = Yup.object().shape({
 const PageAdmin = () => {
 
   const [tabs, setTabs] = useState([
-    { name: 'Statistics', current: true },
-    { name: 'Center Manager', current: false },
-    { name: 'Gift Manager', current: false },
-    { name: 'Address Manager', current: false },
-    { name: 'Distribution Manager', current: false },
-    { name: 'Human Manager', current: false },
-    { name: 'User Manager', current: false },
+    { name: 'Статистика', current: true },
+    { name: 'Центри', current: false },
+    { name: 'Види допомоги', current: false },
+    { name: 'Адреси', current: false },
+    { name: 'Видачі', current: false },
+    { name: 'Люди', current: false },
+    { name: 'Користувачі', current: false },
   ])
 
   const [currentTab, setCurrentTab] = useState(0)
@@ -68,7 +70,7 @@ const PageAdmin = () => {
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-              <div className="relative flex h-16 items-center justify-between">
+              <div className="relative flex h-16 items-center justify-center">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                   {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -80,7 +82,7 @@ const PageAdmin = () => {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex  items-center justify-center sm:items-stretch sm:justify-start">
 
 
                   <div className="hidden sm:ml-6 sm:block">
@@ -131,7 +133,9 @@ const PageAdmin = () => {
       {tabs[1].current ? <CenterManager /> : null}
       {tabs[2].current ? <GiftManager /> : null}
       {tabs[3].current ? <AddressManager /> : null}
+      {tabs[4].current ? <DistributionManager /> : null}
       {tabs[5].current ? <HumanManager /> : null}
+      {tabs[6].current ? <UserManager /> : null}
 
 
 

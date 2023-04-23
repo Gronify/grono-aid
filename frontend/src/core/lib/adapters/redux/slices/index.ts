@@ -3,6 +3,7 @@ import userReducer, {
   userSingOutAction,
   userIsLoadingAction,
   userUpdateAction,
+  usersUpdateAction,
 } from "./user";
 
 import humanSearchReducer, {
@@ -87,6 +88,7 @@ export {
   userSingOutAction,
   userIsLoadingAction,
   userUpdateAction,
+  usersUpdateAction,
   humanSearchReducer,
   humanSearchIsLoadingAction,
   humanSearchUpdateAction,

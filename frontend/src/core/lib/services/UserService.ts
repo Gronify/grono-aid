@@ -2,7 +2,11 @@ import { AxiosInstance } from "axios";
 
 import { Dispatch } from "react";
 import { AnyAction, Observable } from "@reduxjs/toolkit";
-import { userIsLoadingAction, userUpdateAction } from "../adapters";
+import {
+  userIsLoadingAction,
+  userUpdateAction,
+  usersUpdateAction,
+} from "../adapters";
 import { UserEntityInterface } from "../entities/User";
 import { DtoShortStatResponse, DtoUserResponse } from "../dto/user";
 import {
@@ -10,15 +14,27 @@ import {
   userShortStatUpdateAction,
 } from "../adapters/redux/slices/userShortStat";
 
+import {
+  OptionsObject,
+  ProviderContext,
+  SnackbarKey,
+  SnackbarMessage,
+} from "notistack";
+
 export interface UserInterface {
   //   login: (loginData: DtoUserLogin) => any;
 }
 
 export default class UserService implements UserInterface {
   private _axios: AxiosInstance;
+  private _enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey;
 
-  constructor(axios: AxiosInstance) {
+  constructor(axios: AxiosInstance, snackbar: ProviderContext) {
     this._axios = axios;
+    this._enqueueSnackbar = snackbar.enqueueSnackbar;
   }
 
   async getDataByUserId(
@@ -64,6 +80,83 @@ export default class UserService implements UserInterface {
       })
       .finally(() => {
         dispatch(userShortStatSliceIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getUsers(dispatch: Dispatch<AnyAction>, isLoading: boolean) {
+    dispatch(userIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .get<DtoUserResponse[]>("/user/all")
+      .then((response) => {
+        dispatch(usersUpdateAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+      })
+      .finally(() => {
+        dispatch(userIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async edit(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    user: UserInterface
+  ): Promise<Boolean> {
+    dispatch(userIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .patch<Boolean, { data: DtoUserResponse }>("/user", {
+        ...user,
+      })
+      .then((response) => {
+        this.getUsers(dispatch, isLoading);
+        this._enqueueSnackbar("Користувача відредаговано!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(userIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async delete(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    user: UserInterface
+  ): Promise<Boolean> {
+    dispatch(userIsLoadingAction({ isLoading: true }));
+
+    return this._axios
+      .delete<Boolean, { data: DtoUserResponse }>("/gift", {
+        data: {
+          ...user,
+        },
+      })
+      .then((response) => {
+        this.getUsers(dispatch, isLoading);
+        this._enqueueSnackbar("Користувача видаленно!", {
+          variant: "success",
+        });
+        return response.data;
+      })
+      .catch((error: any) => {
+        this._enqueueSnackbar("Помилка!", {
+          variant: "error",
+        });
+        return error;
+      })
+      .finally(() => {
+        dispatch(userIsLoadingAction({ isLoading: false }));
       });
   }
 }

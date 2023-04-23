@@ -8,6 +8,8 @@ import { User, UserDocument } from './schemas/user.schema';
 import { DistributionService } from 'src/givement/distribution.service';
 import * as moment from 'moment';
 import mongoose from 'mongoose';
+import { UpdateHumanDto } from 'src/human/dto/update-human.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -35,7 +37,10 @@ export class UserService {
   }
 
   async getAll(): Promise<User[]> {
-    const users = await this.userModel.find();
+    const users = await this.userModel
+      .find()
+      .populate({ path: 'centerId', model: 'Center' })
+      .populate({ path: 'roles', model: 'Role' });
     return users;
   }
 
@@ -88,5 +93,18 @@ export class UserService {
       distributeToday: distributeToday,
       distributeThisMonth: distributeThisMonth,
     };
+  }
+
+  async deleteById(_id: string): Promise<Boolean> {
+    const user = await this.userModel.deleteOne({ _id: _id });
+    return true;
+  }
+
+  async edit(dto: UpdateUserDto): Promise<User> {
+    const user = await this.userModel.findOneAndUpdate(
+      { _id: dto._id },
+      { ...dto },
+    );
+    return user;
   }
 }
