@@ -17,6 +17,7 @@ import GiftManager from './GiftManager';
 import HumanManager from './HumanManager';
 import UserManager from './UserManager';
 import DistributionManager from './DistributionManager';
+import Statistic from './Statistic';
 
 type Props = {
 
@@ -82,7 +83,7 @@ const PageAdmin = () => {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="flex  items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex items-center justify-center sm:items-stretch sm:justify-start">
 
 
                   <div className="hidden sm:ml-6 sm:block">
@@ -129,7 +130,7 @@ const PageAdmin = () => {
         )}
       </Disclosure>
 
-
+      {tabs[0].current ? <Statistic /> : null}
       {tabs[1].current ? <CenterManager /> : null}
       {tabs[2].current ? <GiftManager /> : null}
       {tabs[3].current ? <AddressManager /> : null}
