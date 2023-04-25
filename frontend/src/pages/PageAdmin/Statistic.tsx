@@ -126,28 +126,55 @@ const Statistic = () => {
       <div className=" shadow sm:rounded-md">
         <div className="bg-white px-4 py-5 sm:p-6">
           <div className=" px-4 py-3 text-center sm:px-6">
-            <div className='relative overflow-x-auto shadow-md sm:rounded-lg flex'>
-              <ResponsiveContainer width={"100%"} height={"100%"} aspect={1} >
-                <AreaChart
-                  width={500}
-                  height={400}
-                  data={data}
-                  margin={{
-                    top: 10,
-                    right: 30,
-                    left: 0,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                  <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                  <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                </AreaChart>
-              </ResponsiveContainer>
+            <div className='relative shadow-md sm:rounded-lg'>
+              <div className='grid grid-cols-6 gap-3'>
+                <div className="col-span-6 sm:col-span-6 lg:col-span-3">
+                  <ResponsiveContainer width={"100%"} height={"100%"} aspect={1} >
+                    <AreaChart
+                      width={400}
+                      height={100}
+                      data={data}
+                      margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                      <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                      <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="col-span-6 sm:col-span-6 lg:col-span-3">
+                  <ResponsiveContainer width={"100%"} height={"100%"} aspect={1} >
+                    <AreaChart
+                      width={400}
+                      height={100}
+                      data={data}
+                      margin={{
+                        top: 10,
+                        right: 30,
+                        left: 0,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                      <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                      <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           </div>
         </div>
