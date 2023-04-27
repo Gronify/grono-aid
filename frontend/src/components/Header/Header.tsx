@@ -31,7 +31,7 @@ const Header = ({
   signOut
 }: Props): JSX.Element => {
   const navigation = [
-    { name: 'Статистика центру', href: '#', current: false },
+    { name: 'Статистика центру', href: 'admin', current: false },
     { name: 'Адмін панель', href: 'admin', current: false },
     // { name: 'Calendar', href: '#', current: false },
   ]
