@@ -61,4 +61,30 @@ export class DistributionController {
   deleteById(@Body() distributionDto: { _id: string }) {
     return this.distributionService.deleteById(distributionDto._id);
   }
+
+  @ApiOperation({ summary: 'Get Statistic Distributions by Center' })
+  @ApiResponse({ status: 200, type: Distribution })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('centerStat')
+  statisticByCenter(@Query() query: { startDate: string; endDate: string }) {
+    return this.distributionService.statByCentersBetweenDates(
+      query.startDate,
+      query.endDate,
+    );
+  }
+
+  @ApiOperation({ summary: 'Get Statistic Distributions by Centers every day' })
+  @ApiResponse({ status: 200, type: Distribution })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Get('centerStatEveryDay')
+  statisticByCenterEveryDay(
+    @Query() query: { startDate: string; endDate: string },
+  ) {
+    return this.distributionService.statByCentersBetweenDatesByEveryDay(
+      query.startDate,
+      query.endDate,
+    );
+  }
 }

@@ -7,6 +7,7 @@ import {
   DistributionDocument,
 } from './schemas/distribution.schema';
 import { CreateDistributionDto } from './dto/create-distribution.dto';
+import moment from 'moment';
 
 @Injectable()
 export class DistributionService {
@@ -60,14 +61,6 @@ export class DistributionService {
     startDate: Date,
     endDate: Date,
   ) {
-    // const distributions = await this.distributionModel.count({
-    //   userId: userId,
-    //   createdAt: {
-    //     $gte: startDate,
-    //     $lte: endDate,
-    //   },
-    // });
-
     const distributions = await this.distributionModel.aggregate([
       {
         $match: {
@@ -126,5 +119,129 @@ export class DistributionService {
   async deleteById(_id: string): Promise<Boolean> {
     const distribution = await this.distributionModel.deleteOne({ _id: _id });
     return true;
+  }
+
+  async statByCentersBetweenDates(startDate: string, endDate: string) {
+    const distributions = await this.distributionModel.aggregate([
+      {
+        $match: {
+          // userId: new ObjectId(userId),
+          createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $lookup: {
+          from: 'centers',
+          localField: 'user.centerId',
+          foreignField: '_id',
+          as: 'center',
+        },
+      },
+      {
+        $unwind: '$center',
+      },
+      {
+        $group: {
+          _id: '$center._id',
+          name: { $first: '$center.name' },
+          totalAmount: { $sum: '$amount' },
+          totalCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return distributions;
+  }
+
+  async statByCentersBetweenDatesByEveryDay(
+    startDate: string,
+    endDate: string,
+  ) {
+    const distributions = await this.distributionModel.aggregate([
+      {
+        $match: {
+          // userId: new ObjectId(userId),
+          createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $lookup: {
+          from: 'centers',
+          localField: 'user.centerId',
+          foreignField: '_id',
+          as: 'center',
+        },
+      },
+      {
+        $unwind: '$center',
+      },
+      {
+        $group: {
+          _id: {
+            centerId: '$center._id',
+            name: '$center.name',
+            day: { $dateToString: { format: '%d.%m.%Y', date: '$createdAt' } },
+          },
+          totalAmount: { $sum: '$amount' },
+          totalCount: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id.day',
+          dailyStats: {
+            $push: {
+              centerId: '$_id.centerId',
+              name: '$_id.name',
+              totalAmount: '$totalAmount',
+              totalCount: '$totalCount',
+            },
+          },
+          dailyTotalAmount: { $sum: '$totalAmount' },
+          dailyAverageAmount: { $avg: '$totalAmount' },
+          dailyMaxAmount: { $max: '$totalAmount' },
+          dailyMinAmount: { $min: '$totalAmount' },
+          dailyTotalCount: { $sum: '$totalCount' },
+          dailyAverageCount: { $avg: '$totalCount' },
+          dailyMaxCount: { $max: '$totalCount' },
+          dailyMinCount: { $min: '$totalCount' },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+      // {
+      //   $group: {
+      //     _id: '$center._id',
+      //     name: { $first: '$center.name' },
+      //     totalAmount: { $sum: '$amount' },
+      //     totalCount: { $sum: 1 },
+      //   },
+      // },
+    ]);
+
+    return distributions;
   }
 }

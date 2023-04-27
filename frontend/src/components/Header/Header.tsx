@@ -31,9 +31,8 @@ const Header = ({
   signOut
 }: Props): JSX.Element => {
   const navigation = [
-    { name: 'Dashboard', href: '#', current: false },
-    { name: 'CenterStat', href: '#', current: false },
-    { name: 'Admin', href: 'admin', current: false },
+    { name: 'Статистика центру', href: '#', current: false },
+    { name: 'Адмін панель', href: 'admin', current: false },
     // { name: 'Calendar', href: '#', current: false },
   ]
   const dispatch = useDispatch()

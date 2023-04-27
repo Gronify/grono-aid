@@ -352,7 +352,7 @@ const PageІssuance = () => {
                   }
                 </div>
                 <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="dateOfBirthday" className="block text-sm font-medium text-gray-700">
                     Дата народження
                   </label>
                   <InputMask

@@ -82,6 +82,16 @@ import userShortStatReducer, {
   userShortStatUpdateAction,
 } from "./userShortStat";
 
+import statisticCentersReducer, {
+  statisticCenterIsLoadingAction,
+  statisticCenterUpdateAction,
+} from "./statisticCenters";
+
+import statisticCentersEveryDayReducer, {
+  statisticCenterEveryDayIsLoadingAction,
+  statisticCenterEveryDayUpdateAction,
+} from "./statisticCentersEveryDay";
+
 export {
   userReducer,
   userSignInAction,
@@ -146,4 +156,10 @@ export {
   userShortStatReducer,
   userShortStatSliceIsLoadingAction,
   userShortStatUpdateAction,
+  statisticCentersReducer,
+  statisticCenterIsLoadingAction,
+  statisticCenterUpdateAction,
+  statisticCentersEveryDayReducer,
+  statisticCenterEveryDayIsLoadingAction,
+  statisticCenterEveryDayUpdateAction,
 };

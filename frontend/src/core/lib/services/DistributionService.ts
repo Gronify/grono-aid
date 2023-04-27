@@ -9,6 +9,10 @@ import {
   distributionsUpdateAction,
   giftIsLoadingAction,
   giftsUpdateAction,
+  statisticCenterEveryDayIsLoadingAction,
+  statisticCenterEveryDayUpdateAction,
+  statisticCenterIsLoadingAction,
+  statisticCenterUpdateAction,
 } from "../adapters";
 import {
   DtoCreateDistribution,
@@ -25,6 +29,11 @@ import {
   DistributionEntityInterface,
   DistributionManagerEntityInterface,
 } from "../entities/Distribution";
+import { StatisticCenterEntityInterface } from "../entities/Statistic";
+import {
+  DtoStatisticCenterEveryDayResponse,
+  DtoStatisticCenterResponse,
+} from "../dto/statistic";
 
 export interface DistributionInterface {
   //   login: (loginData: DtoUserLogin) => any;
@@ -147,6 +156,57 @@ export default class DistributionService implements DistributionInterface {
       })
       .finally(() => {
         dispatch(giftIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getStatisticCenter(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    startDate: Date,
+    endDate: Date
+  ) {
+    dispatch(statisticCenterIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .get<DtoStatisticCenterResponse[]>("/distribution/centerStat", {
+        params: { startDate, endDate },
+      })
+      .then((response) => {
+        dispatch(statisticCenterUpdateAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+      })
+      .finally(() => {
+        dispatch(statisticCenterIsLoadingAction({ isLoading: false }));
+      });
+  }
+
+  async getStatisticCenterEveryDay(
+    dispatch: Dispatch<AnyAction>,
+    isLoading: boolean,
+    startDate: Date,
+    endDate: Date
+  ) {
+    dispatch(statisticCenterEveryDayIsLoadingAction({ isLoading: true }));
+
+    this._axios
+      .get<DtoStatisticCenterEveryDayResponse[]>(
+        "/distribution/centerStatEveryDay",
+        {
+          params: { startDate, endDate },
+        }
+      )
+      .then((response) => {
+        dispatch(statisticCenterEveryDayUpdateAction(response.data));
+        return true;
+      })
+      .catch((error: any) => {
+        return error;
+      })
+      .finally(() => {
+        dispatch(statisticCenterEveryDayIsLoadingAction({ isLoading: false }));
       });
   }
 }
