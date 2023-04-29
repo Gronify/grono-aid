@@ -134,7 +134,8 @@ const DistributionManager = () => {
                 enableRowSelection
                 // enableColumnResizing
                 // columnResizeMode="onEnd"
-                initialState={{ density: "compact" }}
+                initialState={{ density: "compact", pagination: { pageIndex: 0, pageSize: 20 } }}
+
                 localization={MRT_Localization_UK}
                 enableRowActions
                 renderRowActions={distributionActions}

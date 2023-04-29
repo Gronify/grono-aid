@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { LockClosedIcon } from '@heroicons/react/20/solid'
+import { BuildingOfficeIcon, HandRaisedIcon, InboxStackIcon, LockClosedIcon, MapPinIcon, PresentationChartLineIcon, UserIcon, UsersIcon } from '@heroicons/react/20/solid'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../core/lib/frameworks/redux';
 import { humanUpdateAction } from '../../core/lib/adapters';
@@ -35,13 +35,13 @@ const ІssuanceSchema = Yup.object().shape({
 const PageAdmin = () => {
 
   const [tabs, setTabs] = useState([
-    { name: 'Статистика', current: true },
-    { name: 'Центри', current: false },
-    { name: 'Види допомоги', current: false },
-    { name: 'Адреси', current: false },
-    { name: 'Видачі', current: false },
-    { name: 'Люди', current: false },
-    { name: 'Користувачі', current: false },
+    { icon: <PresentationChartLineIcon className="h-5 w-5 mr-1" />, name: 'Статистика', current: true },
+    { icon: <BuildingOfficeIcon className="h-4 w-4 mr-1" />, name: 'Центри', current: false },
+    { icon: <InboxStackIcon className="h-4 w-4 mr-1" />, name: 'Види допомоги', current: false },
+    { icon: <MapPinIcon className="h-4 w-4 mr-1" />, name: 'Адреси', current: false },
+    { icon: <HandRaisedIcon className="h-4 w-4 mr-1" />, name: 'Видачі', current: false },
+    { icon: <UsersIcon className="h-4 w-4 mr-1" />, name: 'Люди', current: false },
+    { icon: <UserIcon className="h-4 w-4 mr-1" />, name: 'Користувачі', current: false },
   ])
 
   const [currentTab, setCurrentTab] = useState(0)
@@ -83,8 +83,7 @@ const PageAdmin = () => {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="flex items-center justify-center sm:items-stretch sm:justify-start">
-
+                <div className="flex items-center justify-around sm:items-stretch sm:justify-start">
 
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
@@ -98,7 +97,11 @@ const PageAdmin = () => {
                           )}
                           aria-current={item.current ? 'page' : undefined}
                         >
-                          {item.name}
+                          <div className="flex content-center ">
+                            {item.icon}
+                            <div className="hidden sm:block md:block lg:hidden">{item.current ? item.name : null}</div>
+                            <div className="block sm:hidden md:hidden lg:block ">{item.name}</div>
+                          </div>
                         </Disclosure.Button>
                       ))}
                     </div>
@@ -121,7 +124,9 @@ const PageAdmin = () => {
                     )}
                     aria-current={item.current ? 'page' : undefined}
                   >
-                    {item.name}
+                    <div className="flex">
+                      {item.icon} {item.name}
+                    </div>
                   </Disclosure.Button>
                 ))}
               </div>
@@ -137,12 +142,7 @@ const PageAdmin = () => {
       {tabs[4].current ? <DistributionManager /> : null}
       {tabs[5].current ? <HumanManager /> : null}
       {tabs[6].current ? <UserManager /> : null}
-
-
-
-
     </>
-
   )
 };
 
