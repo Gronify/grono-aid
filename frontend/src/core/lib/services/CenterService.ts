@@ -75,7 +75,7 @@ export default class CenterService implements CenterInterface {
       })
       .then((response) => {
         this.getCenters(dispatch, isLoading);
-        this._enqueueSnackbar("Центр створенно!", {
+        this._enqueueSnackbar("Центр створено!", {
           variant: "success",
         });
         return response.data;
@@ -155,7 +155,7 @@ export default class CenterService implements CenterInterface {
           })
         );
         this.getCenters(dispatch, isLoading);
-        this._enqueueSnackbar("Центр видаленно!", {
+        this._enqueueSnackbar("Центр видалено!", {
           variant: "success",
         });
         return response.data;

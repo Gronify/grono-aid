@@ -75,7 +75,7 @@ export default class HumanService implements HumanInterface {
     return this._axios
       .post<DtoCreateHuman, { data: DtoHumanSearchResponse }>("/human", human)
       .then((response) => {
-        this._enqueueSnackbar("Людина створенна!", {
+        this._enqueueSnackbar("Людина створена!", {
           variant: "success",
         });
         return response.data;

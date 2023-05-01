@@ -143,7 +143,7 @@ export default class DistributionService implements DistributionInterface {
       })
       .then((response) => {
         this.getDistributionsByCenter(dispatch, isLoading, centerId);
-        this._enqueueSnackbar("Видачу видаленно!", {
+        this._enqueueSnackbar("Видачу видалено!", {
           variant: "success",
         });
         return response.data;

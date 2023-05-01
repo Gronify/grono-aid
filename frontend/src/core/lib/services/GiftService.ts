@@ -73,7 +73,7 @@ export default class GiftService implements GiftInterface {
           })
         );
         this.getGifts(dispatch, isLoading);
-        this._enqueueSnackbar("Вид допомоги створенно!", {
+        this._enqueueSnackbar("Вид допомоги створено!", {
           variant: "success",
         });
         return response.data;
@@ -153,7 +153,7 @@ export default class GiftService implements GiftInterface {
           })
         );
         this.getGifts(dispatch, isLoading);
-        this._enqueueSnackbar("Вид допомоги видаленно!", {
+        this._enqueueSnackbar("Вид допомоги видалено!", {
           variant: "success",
         });
         return response.data;

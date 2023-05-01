@@ -144,7 +144,7 @@ export default class UserService implements UserInterface {
       })
       .then((response) => {
         this.getUsers(dispatch, isLoading);
-        this._enqueueSnackbar("Користувача видаленно!", {
+        this._enqueueSnackbar("Користувача видалено!", {
           variant: "success",
         });
         return response.data;
