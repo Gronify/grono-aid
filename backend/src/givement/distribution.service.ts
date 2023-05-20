@@ -30,6 +30,11 @@ export class DistributionService {
       .populate({
         path: 'giftId',
         model: 'Gift',
+      })
+      .populate({
+        path: 'userId',
+        model: 'User',
+        populate: { path: 'centerId', model: 'Center' },
       });
 
     return distributions;

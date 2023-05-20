@@ -145,7 +145,7 @@ const GiftManager = () => {
           <div className="grid grid-cols-6 gap-2">
             <div className="col-span-6">
               <label htmlFor="giftName" className="block text-sm font-medium text-gray-700">
-                Назва подарку
+                Назва виду допомоги
               </label>
               <input
                 type="text"

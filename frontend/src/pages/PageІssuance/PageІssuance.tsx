@@ -533,7 +533,7 @@ const PageІssuance = () => {
 
 
                   <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                    {"1000-7?"}
+                    {""}
                   </div>
                 </div>
               </li></Link>

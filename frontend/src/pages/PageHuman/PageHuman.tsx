@@ -151,7 +151,7 @@ const PageHuman = () => {
                   return <li>
                     <div className="flex flex-start items-center pt-3">
                       <div className="bg-gray-300 w-2 h-2 rounded-full -ml-1 mr-3"></div>
-                      <p className="text-gray-500 text-sm">{moment(distribution.createdAt).format('DD.MM.YYYY HH:mm:ss')}</p>
+                      <p className="text-gray-500 text-sm">{` ${moment(distribution.createdAt).format('DD.MM.YYYY HH:mm:ss')} , ${distribution.userId.centerId.name}, ${distribution.userId.surname} ${distribution.userId.name} ${distribution.userId.patronymic}`}</p>
                     </div>
                     <div className="mt-0.5 ml-4 mb-6">
                       <h4 className="text-gray-800 font-semibold text-xl mb-1.5">{distribution.giftId.name} {distribution.amount} {distribution.giftId.measurement}</h4>

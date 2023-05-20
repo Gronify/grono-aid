@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCenterDto {
-  @ApiProperty({ example: 'TatoHub', description: 'Name of center' })
+  @ApiProperty({ example: 'CenterHub', description: 'Name of center' })
   readonly name: string;
 
-  @ApiProperty({ example: 'TatoHub', description: 'address of center' })
+  @ApiProperty({ example: 'CenterHub', description: 'address of center' })
   readonly address: string;
 
   @ApiProperty({ example: '+380991234567', description: 'phone of center' })
